@@ -1,0 +1,28 @@
+.env.local
+.env.test
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.log
+
+# Test coverage
+coverage/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# markdown
+tmp.txt
+docs/
+rules/
+*log.md
