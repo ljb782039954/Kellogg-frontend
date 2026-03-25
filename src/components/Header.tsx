@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Globe, Share2 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useContent } from '../context/ContentContext';
-import siteSettings from '../config/siteSettings.json';
 
 interface HeaderProps {
   theme?: 'light' | 'dark' | 'vintage' | 'street' | 'luxury';
@@ -54,11 +53,12 @@ export default function Header({ theme = 'light' }: HeaderProps) {
   };
 
   const style = themeStyles[theme];
-  const { header } = content;
+  // Since we check content in App.tsx before rendering Header, this is safe
+  const { header, companyInfo } = content!;
 
   const handleShare = () => {
     const url = window.location.origin; // Specifically share home page
-    const title = siteSettings.brand.name[language as keyof typeof siteSettings.brand.name];
+    const title = companyInfo.name[language as 'zh' | 'en'];
     
     if (navigator.share) {
       navigator.share({
@@ -82,15 +82,15 @@ export default function Header({ theme = 'light' }: HeaderProps) {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            {siteSettings.brand.logo && (
-              <img src={siteSettings.brand.logo} alt="Logo" className="w-8 h-8 md:w-10 md:h-10 object-contain" />
+            {companyInfo.logo && (
+              <img src={companyInfo.logo} alt="Logo" className="w-8 h-8 md:w-10 md:h-10 object-contain" />
             )}
             <motion.span
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               className={`text-xl md:text-2xl font-bold tracking-wider ${style.text}`}
             >
-              {siteSettings.brand.name[language as keyof typeof siteSettings.brand.name]}
+              {companyInfo.name[language as 'zh' | 'en']}
             </motion.span>
           </Link>
 
@@ -105,7 +105,7 @@ export default function Header({ theme = 'light' }: HeaderProps) {
               >
                 {item.href === '#' ? (
                   <span className={`text-sm font-medium ${style.text} opacity-50 cursor-default`}>
-                    {item.name[language]}
+                    {item.name[language as 'zh' | 'en']}
                   </span>
                 ) : (
                   <Link
@@ -114,7 +114,7 @@ export default function Header({ theme = 'light' }: HeaderProps) {
                       location.pathname === item.href ? 'opacity-100' : 'opacity-70'
                     } hover:opacity-100 transition-opacity`}
                   >
-                    {item.name[language]}
+                    {item.name[language as 'zh' | 'en']}
                   </Link>
                 )}
               </motion.div>
@@ -144,6 +144,7 @@ export default function Header({ theme = 'light' }: HeaderProps) {
               <Globe className="w-4 h-4" />
               {language === 'zh' ? '中文' : 'EN'}
             </motion.button>
+
             
             {/* Mobile Menu Button */}
             <button
@@ -181,7 +182,7 @@ export default function Header({ theme = 'light' }: HeaderProps) {
               {header.navItems.map((item) => 
                 item.href === '#' ? (
                   <span key={item.href} className={`text-lg font-medium ${style.text} py-2 opacity-50 cursor-default`}>
-                    {item.name[language]}
+                    {item.name[language as 'zh' | 'en']}
                   </span>
                 ) : (
                   <Link
@@ -192,7 +193,7 @@ export default function Header({ theme = 'light' }: HeaderProps) {
                       location.pathname === item.href ? 'opacity-100' : 'opacity-70'
                     }`}
                   >
-                    {item.name[language]}
+                    {item.name[language as 'zh' | 'en']}
                   </Link>
                 )
               )}

@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
+import { Mail, Phone, MapPin, } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useContent } from '../context/ContentContext';
-import siteSettings from '../config/siteSettings.json';
+import SocialLinks from './custom/soicalLinks';
 
 interface FooterProps {
   theme?: 'light' | 'dark' | 'vintage' | 'street' | 'luxury';
@@ -12,7 +12,7 @@ interface FooterProps {
 export default function Footer({ theme = 'light' }: FooterProps) {
   const { language } = useLanguage();
   const { content } = useContent();
-  const { footer } = content;
+  const { footer, companyInfo } = content!;
 
   const themeStyles = {
     light: {
@@ -23,42 +23,6 @@ export default function Footer({ theme = 'light' }: FooterProps) {
       link: 'text-gray-400 hover:text-white',
       input: 'bg-gray-800 border-gray-700 text-white',
       button: 'bg-white text-gray-900 hover:bg-gray-100',
-    },
-    dark: {
-      bg: 'bg-black',
-      text: 'text-white',
-      textMuted: 'text-gray-400',
-      border: 'border-gray-800',
-      link: 'text-gray-400 hover:text-white',
-      input: 'bg-gray-800 border-gray-700 text-white',
-      button: 'bg-white text-gray-900 hover:bg-gray-100',
-    },
-    vintage: {
-      bg: 'bg-amber-950',
-      text: 'text-amber-50',
-      textMuted: 'text-amber-400',
-      border: 'border-amber-900',
-      link: 'text-amber-400 hover:text-amber-50',
-      input: 'bg-amber-900 border-amber-800 text-amber-50',
-      button: 'bg-amber-700 text-amber-50 hover:bg-amber-600',
-    },
-    street: {
-      bg: 'bg-black',
-      text: 'text-white',
-      textMuted: 'text-gray-400',
-      border: 'border-purple-500/30',
-      link: 'text-gray-400 hover:text-purple-400',
-      input: 'bg-gray-900 border-purple-500/30 text-white',
-      button: 'bg-gradient-to-r from-purple-500 to-pink-500 text-white',
-    },
-    luxury: {
-      bg: 'bg-black',
-      text: 'text-amber-100',
-      textMuted: 'text-amber-400',
-      border: 'border-amber-500/30',
-      link: 'text-amber-400 hover:text-amber-100',
-      input: 'bg-gray-900 border-amber-500/30 text-amber-100',
-      button: 'bg-gradient-to-r from-amber-500 to-yellow-400 text-black',
     },
   };
 
@@ -78,21 +42,21 @@ export default function Footer({ theme = 'light' }: FooterProps) {
             className="lg:col-span-1"
           >
             <h3 className={`text-2xl font-bold mb-4 ${style.text}`}>
-              {siteSettings.brand.name[language as keyof typeof siteSettings.brand.name]}
+              {companyInfo.name[language as 'zh' | 'en']}
             </h3>
             <p className={`mb-6 ${style.textMuted}`}>
-              {siteSettings.brand.description[language as keyof typeof siteSettings.brand.description]}
+              {companyInfo.description[language as 'zh' | 'en']}
             </p>
-            
+
             {/* Newsletter */}
             <div className="flex gap-2">
               <input
                 type="email"
-                placeholder={footer.newsletterPlaceholder[language]}
+                placeholder={footer.newsletterPlaceholder[language as 'zh' | 'en']}
                 className={`flex-1 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 ${style.input}`}
               />
               <button className={`px-4 py-2 rounded-lg font-medium transition-all ${style.button}`}>
-                {footer.newsletterButton[language]}
+                {footer.newsletterButton[language as 'zh' | 'en']}
               </button>
             </div>
           </motion.div>
@@ -142,31 +106,20 @@ export default function Footer({ theme = 'light' }: FooterProps) {
             <ul className="space-y-3">
               <li className={`flex items-center gap-3 ${style.textMuted}`}>
                 <Phone className="w-5 h-5" />
-                <span>{siteSettings.contact.phone}</span>
+                <span>{companyInfo.contact.phone}</span>
               </li>
               <li className={`flex items-center gap-3 ${style.textMuted}`}>
                 <Mail className="w-5 h-5" />
-                <span>{siteSettings.contact.email}</span>
+                <span>{companyInfo.contact.email}</span>
               </li>
               <li className={`flex items-start gap-3 ${style.textMuted}`}>
                 <MapPin className="w-5 h-5 mt-0.5" />
-                <span>{siteSettings.contact.address[language as keyof typeof siteSettings.contact.address]}</span>
+                <span>{companyInfo.contact.address[language as 'zh' | 'en']}</span>
               </li>
             </ul>
 
             {/* Social Links */}
-            <div className="flex gap-4 mt-6">
-              {[Facebook, Instagram, Twitter, Youtube].map((Icon, index) => (
-                <a
-                  key={index}
-                  href="#"
-                  onClick={(e) => e.preventDefault()}
-                  className={`w-10 h-10 rounded-full border ${style.border} flex items-center justify-center transition-all hover:scale-110 ${style.link}`}
-                >
-                  <Icon className="w-5 h-5" />
-                </a>
-              ))}
-            </div>
+            <SocialLinks socialLinks={companyInfo.socialMedia} />
           </motion.div>
         </div>
 
@@ -174,7 +127,7 @@ export default function Footer({ theme = 'light' }: FooterProps) {
         <div className={`border-t ${style.border} pt-8`}>
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className={`text-sm ${style.textMuted}`}>
-              © 2024 {siteSettings.brand.name[language as keyof typeof siteSettings.brand.name]}. {language === 'zh' ? '保留所有权利。' : 'All rights reserved.'}
+              © 2024 {companyInfo.name[language as 'zh' | 'en']}. {language === 'zh' ? '保留所有权利。' : 'All rights reserved.'}
             </p>
             <div className={`flex gap-6 text-sm ${style.textMuted}`}>
               <button onClick={(e) => e.preventDefault()} className="hover:underline cursor-default">

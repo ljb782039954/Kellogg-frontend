@@ -1,32 +1,76 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
-import { ContentProvider } from './context/ContentContext';
+import { ContentProvider, useContent } from './context/ContentContext';
+import { Loader2 } from 'lucide-react';
 
-// Frontend Pages
-import Home from './pages/Home.tsx';
-import NewArrivals from './pages/NewArrivals';
-import Products from './pages/Products';
-import Factory from './pages/Factory';
-import FAQ from './pages/FAQ';
+// Components
+import Header from './components/Header';
+import Footer from './components/Footer';
+
+// Pages
+import DynamicPage from './pages/DynamicPage';
 import ProductDetail from './pages/ProductDetail';
+
+function AppRoutes() {
+  const { content } = useContent();
+
+  return (
+    <>
+      <Header theme="light" />
+      <div className="mt-16 md:mt-20">
+        <Routes>
+          {/* Dynamic Pages defined in config */}
+          {content!.pages.map((page) => (
+            <Route
+              key={page.id}
+              path={page.path}
+              element={<DynamicPage page={page} />}
+            />
+          ))}
+
+          {/* Fixed Dynamic Route for relational Models */}
+          <Route path="/product/:id" element={<ProductDetail />} />
+
+          {/* Catch-all fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+      <Footer theme="light" />
+    </>
+  );
+}
+
+function AppContent() {
+  const { content, isLoading, error } = useContent();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Loader2 className="w-8 h-8 animate-spin text-gray-500" />
+      </div>
+    );
+  }
+
+  if (error || !content) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 text-red-500">
+        加载失败，请刷新重试 (Error loading content)
+      </div>
+    );
+  }
+
+  return (
+    <Router>
+      <AppRoutes />
+    </Router>
+  );
+}
 
 function App() {
   return (
     <LanguageProvider>
       <ContentProvider>
-        <Router>
-          <Routes>
-            {/* Frontend Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/new-arrivals" element={<NewArrivals />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
-            <Route path="/factory" element={<Factory />} />
-            <Route path="/faq" element={<FAQ />} />
-            {/* Catch-all */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </Router>
+        <AppContent />
       </ContentProvider>
     </LanguageProvider>
   );

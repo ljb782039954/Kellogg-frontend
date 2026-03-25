@@ -1,122 +1,64 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import type { SiteContent, Product } from '../types';
-import { defaultContent, allProducts as defaultAllProducts } from '../config/defaultContent';
+import type { SiteContent, CompanyInfo, HeaderContent, FooterContent, CustomPage } from '../types';
+import { api } from '../lib/api';
 
 interface ContentContextType {
-  content: SiteContent;
-  allProducts: Product[];
-  updateContent: (newContent: SiteContent) => void;
-  updateHeader: (header: SiteContent['header']) => void;
-  updateHome: (home: SiteContent['home']) => void;
-  updateProducts: (products: SiteContent['products']) => void;
-  updateCategories: (categories: SiteContent['products']['categories']) => void;
-  updateAllProducts: (products: Product[]) => void;
-  updateNewArrivals: (newArrivals: SiteContent['newArrivals']) => void;
-  updateFactory: (factory: SiteContent['factory']) => void;
-  updateFAQ: (faq: SiteContent['faq']) => void;
-  updateFooter: (footer: SiteContent['footer']) => void;
+  content: SiteContent | null;
+  isLoading: boolean;
+  error: Error | null;
+  refreshContent: () => Promise<void>;
 }
-
-const CONTENT_STORAGE_KEY = 'minimal_site_content';
-const PRODUCTS_STORAGE_KEY = 'minimal_all_products';
 
 const ContentContext = createContext<ContentContextType | undefined>(undefined);
 
 export function ContentProvider({ children }: { children: ReactNode }) {
-  const [content, setContent] = useState<SiteContent>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem(CONTENT_STORAGE_KEY);
-      if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch {
-          return defaultContent;
-        }
-      }
+  const [content, setContent] = useState<SiteContent | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const fetchContent = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const [
+        siteSettings,
+        headerConfig,
+        footerConfig,
+        pagesData,
+      ] = await Promise.all([
+        api.getConfig<CompanyInfo>('site_settings'),
+        api.getConfig<HeaderContent>('header_config'),
+        api.getConfig<FooterContent>('footer_config'),
+        api.getConfig<CustomPage[]>('pages'),
+      ]);
+
+      setContent({
+        companyInfo: siteSettings as CompanyInfo,
+        header: headerConfig as HeaderContent,
+        footer: footerConfig as FooterContent,
+        pages: pagesData as CustomPage[],
+      });
+    } catch (err) {
+      console.error('Failed to fetch site content:', err);
+      setError(err instanceof Error ? err : new Error('Failed to fetch content'));
+    } finally {
+      setIsLoading(false);
     }
-    return defaultContent;
-  });
+  };
 
-  const [allProducts, setAllProducts] = useState<Product[]>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem(PRODUCTS_STORAGE_KEY);
-      if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch {
-          return defaultAllProducts;
-        }
-      }
-    }
-    return defaultAllProducts;
-  });
-
+  // Initial fetch on mount
   useEffect(() => {
-    localStorage.setItem(CONTENT_STORAGE_KEY, JSON.stringify(content));
-  }, [content]);
-
-  useEffect(() => {
-    localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(allProducts));
-  }, [allProducts]);
-
-  const updateContent = (newContent: SiteContent) => {
-    setContent(newContent);
-  };
-
-  const updateHeader = (header: SiteContent['header']) => {
-    setContent((prev) => ({ ...prev, header }));
-  };
-
-  const updateHome = (home: SiteContent['home']) => {
-    setContent((prev) => ({ ...prev, home }));
-  };
-
-  const updateProducts = (products: SiteContent['products']) => {
-    setContent((prev) => ({ ...prev, products }));
-  };
-
-  const updateAllProducts = (products: Product[]) => {
-    setAllProducts(products);
-  };
-  
-  const updateCategories = (categories: SiteContent['products']['categories']) => {
-    setContent((prev) => ({
-      ...prev,
-      products: { ...prev.products, categories }
-    }));
-  };
-
-  const updateNewArrivals = (newArrivals: SiteContent['newArrivals']) => {
-    setContent((prev) => ({ ...prev, newArrivals }));
-  };
-
-  const updateFactory = (factory: SiteContent['factory']) => {
-    setContent((prev) => ({ ...prev, factory }));
-  };
-
-  const updateFAQ = (faq: SiteContent['faq']) => {
-    setContent((prev) => ({ ...prev, faq }));
-  };
-
-  const updateFooter = (footer: SiteContent['footer']) => {
-    setContent((prev) => ({ ...prev, footer }));
-  };
+    fetchContent();
+  }, []);
 
   return (
     <ContentContext.Provider
       value={{
         content,
-        allProducts,
-        updateContent,
-        updateHeader,
-        updateHome,
-        updateProducts,
-        updateCategories,
-        updateAllProducts,
-        updateNewArrivals,
-        updateFactory,
-        updateFAQ,
-        updateFooter,
+        isLoading,
+        error,
+        refreshContent: fetchContent
       }}
     >
       {children}

@@ -1,29 +1,27 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, Star, ShoppingBag, Truck, ShieldCheck, RefreshCw, Layers, Calendar, ArrowRight, Share2 } from 'lucide-react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import {
+  ChevronLeft, Star,
+  //  ShoppingBag, Truck, ShieldCheck, RefreshCw, 
+  Layers, Calendar, ArrowRight, Share2, Loader2
+} from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import { useContent } from '../context/ContentContext';
+import { useProductDetail } from '../hooks/useProductDetail';
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { language } = useLanguage();
-  const { allProducts, content } = useContent();
-  
-  const product = useMemo(() => {
-    // 兼容数字和字符串 ID 匹配
-    return allProducts.find(p => String(p.id) === String(id));
-  }, [allProducts, id]);
+
+  const { product, relatedProducts, loading } = useProductDetail(id);
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   const handleProductShare = () => {
     const url = window.location.href;
-    const title = product?.name?.[language] || 'Product';
-    
+    const title = product?.name?.[language as 'zh' | 'en'] || 'Product';
+
     if (navigator.share) {
       navigator.share({
         title,
@@ -40,35 +38,45 @@ export default function ProductDetail() {
     });
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <div className="pt-40 pb-20 flex flex-col items-center justify-center">
+          <Loader2 className="w-12 h-12 animate-spin text-gray-200 mb-4" />
+          <p className="text-gray-400 capitalize tracking-widest text-xs font-bold">
+            {language === 'zh' ? '加载中...' : 'Loading Details...'}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   if (!product) {
     return (
       <div className="min-h-screen bg-white">
-        <Header theme="light" />
         <div className="pt-40 pb-20 text-center">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">
             {language === 'zh' ? '抱歉，未找到该商品' : 'Sorry, product not found'}
           </h2>
-          <button 
+          <button
             onClick={() => navigate('/products')}
-            className="text-gray-900 font-bold flex items-center gap-2 mx-auto hover:gap-3 transition-all"
+            className="text-gray-900 font-bold flex items-center gap-2 mx-auto hover:gap-3 transition-all uppercase tracking-tighter"
           >
             <ChevronLeft className="w-5 h-5" />
             {language === 'zh' ? '返回全部商品' : 'Back to all products'}
           </button>
         </div>
-        <Footer theme="light" />
       </div>
     );
   }
 
   // Gallery images (use detail images if available, otherwise fallback to main image)
-  const gallery = product.images && product.images.length > 0 
-    ? product.images 
+  const gallery = product.images && product.images.length > 0
+    ? product.images
     : [product.image];
 
   return (
     <div className="min-h-screen bg-white">
-      <Header theme="light" />
 
       <main className="pt-24 pb-20">
         <div className="container mx-auto px-4">
@@ -97,7 +105,7 @@ export default function ProductDetail() {
                     className="w-full h-full object-cover"
                   />
                 </AnimatePresence>
-                
+
                 {product.tag && product.tag[language] && (
                   <span className="absolute top-6 left-6 px-4 py-1.5 bg-gray-900 text-white text-xs font-bold rounded-full tracking-wider uppercase">
                     {product.tag[language]}
@@ -111,9 +119,8 @@ export default function ProductDetail() {
                   <button
                     key={idx}
                     onClick={() => setActiveImageIndex(idx)}
-                    className={`relative w-24 aspect-square rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all ${
-                      activeImageIndex === idx ? 'border-gray-900' : 'border-transparent hover:border-gray-200'
-                    }`}
+                    className={`relative w-24 aspect-square rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all ${activeImageIndex === idx ? 'border-gray-900' : 'border-transparent hover:border-gray-200'
+                      }`}
                   >
                     <img src={img} alt="" className="w-full h-full object-cover" />
                   </button>
@@ -127,7 +134,7 @@ export default function ProductDetail() {
                 <div>
                   <div className="flex items-center gap-3 mb-4">
                     <span className="text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-full uppercase tracking-wide">
-                      {content?.products?.categories?.find(c => c.id === product.category)?.name?.[language] || product.category}
+                      {product.category}
                     </span>
                     <div className="flex items-center gap-1 text-amber-400">
                       <Star className="w-4 h-4 fill-current" />
@@ -138,7 +145,7 @@ export default function ProductDetail() {
                     <h1 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight leading-tight uppercase">
                       {product.name?.[language]}
                     </h1>
-                    <button 
+                    <button
                       onClick={handleProductShare}
                       className="p-3 rounded-full bg-gray-50 text-gray-400 hover:text-gray-900 hover:bg-gray-100 transition-all shadow-sm"
                       title={language === 'zh' ? '分享商品' : 'Share product'}
@@ -157,18 +164,19 @@ export default function ProductDetail() {
 
                 <div className="space-y-6">
                   <p className="text-gray-500 leading-relaxed text-lg font-light">
-                    {language === 'zh' 
-                      ? '这款设计完美诠释了极简主义美学。通过高品质面料与立体精剪，为都市生活带来极致舒适与优雅型格。每一个细节都经过反复推敲，只为呈现最纯粹的时尚态度。' 
+                    {language === 'zh'
+                      ? '这款设计完美诠释了极简主义美学。通过高品质面料与立体精剪，为都市生活带来极致舒适与优雅型格。每一个细节都经过反复推敲，只为呈现最纯粹的时尚态度。'
                       : 'This design perfectly interprets the minimalist aesthetic. Through high-quality fabrics and 3D precision tailoring, it brings ultimate comfort and elegant style to urban life.'
                     }
                   </p>
-                  
+
                   <div className="grid grid-cols-2 gap-y-4 pt-4">
                     <div className="flex items-center gap-3">
                       <Layers className="w-5 h-5 text-gray-400" />
                       <div>
                         <p className="text-xs text-gray-400 uppercase font-bold">{language === 'zh' ? '商品分类' : 'Category'}</p>
-                        <p className="font-bold text-gray-800">{content?.products?.categories?.find(c => c.id === product.category)?.name?.[language] || product.category}</p>
+                        <p className="font-bold text-gray-800">
+                          {product.category}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -182,7 +190,7 @@ export default function ProductDetail() {
                 </div>
 
                 {/* Purchase Area */}
-                <div className="pt-8 space-y-4">
+                {/* <div className="pt-8 space-y-4">
                   <button className="w-full py-5 bg-gray-900 text-white rounded-2xl font-bold text-lg hover:bg-black transition-all flex items-center justify-center gap-3 shadow-xl hover:scale-[1.02] active:scale-95">
                     <ShoppingBag className="w-6 h-6" />
                     {language === 'zh' ? '立即购买' : 'Shop Now'}
@@ -192,7 +200,7 @@ export default function ProductDetail() {
                     <span className="flex items-center gap-1"><ShieldCheck className="w-4 h-4" /> {language === 'zh' ? '正品保证' : 'Auth Check'}</span>
                     <span className="flex items-center gap-1"><RefreshCw className="w-4 h-4" /> {language === 'zh' ? '7天不放退换' : '7 Days Return'}</span>
                   </p>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -214,13 +222,13 @@ export default function ProductDetail() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {allProducts.filter(p => p.id !== product.id).slice(0, 4).map(item => (
+            {relatedProducts.map(item => (
               <Link to={`/product/${item.id}`} key={item.id} className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-gray-100">
                 <div className="aspect-[3/4] overflow-hidden">
-                  <img src={item.image} alt={item.name[language]} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <img src={item.image} alt={item.name[language as 'zh' | 'en']} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                 </div>
                 <div className="p-4">
-                  <h4 className="font-bold text-gray-800 line-clamp-1">{item.name[language]}</h4>
+                  <h4 className="font-bold text-gray-800 line-clamp-1">{item.name[language as 'zh' | 'en']}</h4>
                   <p className="text-gray-900 font-bold mt-1">¥{item.price}</p>
                 </div>
               </Link>
@@ -229,7 +237,6 @@ export default function ProductDetail() {
         </div>
       </section>
 
-      <Footer theme="light" />
     </div>
   );
 }

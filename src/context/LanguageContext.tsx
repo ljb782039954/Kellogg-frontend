@@ -1,19 +1,23 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
-import type { Language } from '../types';
+import type { Language, Translation } from '../types';
 
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (zh: string, en: string) => string;
+  t: (zhOrTranslation: string | Translation, en?: string) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>('zh');
+  const [language, setLanguage] = useState<Language>('en');
 
-  const t = (zh: string, en: string): string => {
-    return language === 'zh' ? zh : en;
+  const t = (zhOrTranslation: string | Translation, en?: string): string => {
+    if (typeof zhOrTranslation === 'object' && zhOrTranslation !== null) {
+      return language === 'en' ? zhOrTranslation.zh : zhOrTranslation.en;
+    }
+    const zhStr = zhOrTranslation as string;
+    return language === 'en' ? zhStr : (en || zhStr);
   };
 
   return (
