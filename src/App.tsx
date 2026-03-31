@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
 import { ContentProvider, useContent } from './context/ContentContext';
+import { CurrencyProvider } from './context/CurrencyContext';
 import { Loader2 } from 'lucide-react';
 
 // Components
@@ -70,7 +71,9 @@ function App() {
   return (
     <LanguageProvider>
       <ContentProvider>
-        <AppContent />
+        <CurrencyProvider>
+          <AppContent />
+        </CurrencyProvider>
       </ContentProvider>
     </LanguageProvider>
   );

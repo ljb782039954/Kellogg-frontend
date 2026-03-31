@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import {
   Star
 } from 'lucide-react';
+import { useCurrency } from '@/context/CurrencyContext';
 
 interface ProductCardFeaturedProps {
   t: (obj: { zh: string; en: string }) => string;
@@ -26,6 +27,7 @@ interface ProductCardFeaturedProps {
 export default function ProductCardFeatured({
   t, product
 }: ProductCardFeaturedProps) {
+  const { formatPrice } = useCurrency();
 
   const style = {
     bg: 'bg-gray-50',
@@ -96,11 +98,11 @@ export default function ProductCardFeatured({
         {/* Price */}
         <div className="flex items-center gap-2 mb-3">
           <span className={`text-lg font-bold ${style.price}`}>
-            ¥{product.price}
+            {formatPrice(product.price)}
           </span>
           {product.originalPrice && (
             <span className={`text-sm line-through ${style.originalPrice}`}>
-              ¥{product.originalPrice}
+              {formatPrice(product.originalPrice)}
             </span>
           )}
         </div>

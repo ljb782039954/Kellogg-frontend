@@ -8,11 +8,13 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useProductDetail } from '../hooks/useProductDetail';
+import { useCurrency } from '../context/CurrencyContext';
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { language } = useLanguage();
+  const { formatPrice } = useCurrency();
 
   const { product, relatedProducts, loading } = useProductDetail(id);
 
@@ -156,9 +158,9 @@ export default function ProductDetail() {
                 </div>
 
                 <div className="flex items-baseline gap-4 border-b border-gray-100 pb-8">
-                  <span className="text-5xl font-bold text-gray-900">¥{product.price}</span>
+                  <span className="text-5xl font-bold text-gray-900">{formatPrice(product.price)}</span>
                   {product.originalPrice && (
-                    <span className="text-2xl text-gray-300 line-through">¥{product.originalPrice}</span>
+                    <span className="text-2xl text-gray-300 line-through">{formatPrice(product.originalPrice)}</span>
                   )}
                 </div>
 
@@ -229,7 +231,7 @@ export default function ProductDetail() {
                 </div>
                 <div className="p-4">
                   <h4 className="font-bold text-gray-800 line-clamp-1">{item.name[language as 'zh' | 'en']}</h4>
-                  <p className="text-gray-900 font-bold mt-1">¥{item.price}</p>
+                  <p className="text-gray-900 font-bold mt-1">{formatPrice(item.price)}</p>
                 </div>
               </Link>
             ))}

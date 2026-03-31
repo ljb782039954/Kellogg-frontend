@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import type { Product } from '@/types';
+import { useCurrency } from '@/context/CurrencyContext';
 
 interface Props {
     product: Product;
@@ -12,6 +13,7 @@ export default function ProductCard({
     index = 0,
     t
 }: Props) {
+    const { formatPrice } = useCurrency();
 
     return (
         <motion.div
@@ -48,11 +50,11 @@ export default function ProductCard({
                 <div className="flex items-center justify-between mt-auto">
                     <div className="flex items-center gap-2">
                         <span className="text-lg font-bold text-gray-900">
-                            ¥{product.price}
+                            {formatPrice(product.price)}
                         </span>
                         {product.originalPrice && (
                             <span className="text-sm text-gray-400 line-through">
-                                ¥{product.originalPrice}
+                                {formatPrice(product.originalPrice)}
                             </span>
                         )}
                     </div>

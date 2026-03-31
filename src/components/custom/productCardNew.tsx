@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { Product } from '@/types';
+import { useCurrency } from '@/context/CurrencyContext';
 
 interface ProductCardNewProps {
     t: (obj: { zh: string; en: string }) => string;
@@ -10,7 +11,7 @@ interface ProductCardNewProps {
 }
 
 export default function ProductCardNew({ product, t, index }: ProductCardNewProps) {
-
+    const { formatPrice } = useCurrency();
 
     return (
 
@@ -50,7 +51,7 @@ export default function ProductCardNew({ product, t, index }: ProductCardNewProp
                     <h3 className="text-xl font-bold text-gray-900 group-hover:text-amber-600 transition-colors">
                         {t(product.name)}
                     </h3>
-                    <span className="text-lg font-medium text-gray-500">¥{product.price}</span>
+                    <span className="text-lg font-medium text-gray-500">{formatPrice(product.price)}</span>
                 </div>
                 <p className="text-sm text-gray-400 capitalize">
                     {product.category}
