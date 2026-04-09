@@ -144,7 +144,10 @@ export default function ProductDetail() {
                     </div>
                   </div>
                   <div className="flex justify-between items-start">
-                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight leading-tight uppercase">
+                    <h1 className="
+                    text-4xl md:text-5xl font-bold text-gray-900 
+                    leading-relaxed
+                    ">
                       {product.name?.[language]}
                     </h1>
                     <button
