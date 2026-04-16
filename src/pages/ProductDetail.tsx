@@ -19,6 +19,9 @@ export default function ProductDetail() {
   const { product, relatedProducts, loading } = useProductDetail(id);
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [selectedColorIndex, setSelectedColorIndex] = useState<number | null>(null);
+  const [variantPreviewImage, setVariantPreviewImage] = useState<string | null>(null);
 
   const handleProductShare = () => {
     const url = window.location.href;
@@ -97,8 +100,8 @@ export default function ProductDetail() {
               <div className="aspect-[4/5] rounded-3xl overflow-hidden bg-gray-50 border border-gray-100 relative">
                 <AnimatePresence mode="wait">
                   <motion.img
-                    key={gallery[activeImageIndex]}
-                    src={gallery[activeImageIndex]}
+                    key={variantPreviewImage || gallery[activeImageIndex]}
+                    src={variantPreviewImage || gallery[activeImageIndex]}
                     alt={product.name?.[language]}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -167,6 +170,67 @@ export default function ProductDetail() {
                   )}
                 </div>
 
+                {/* Color Selector */}
+                {product.colors && product.colors.length > 0 && (
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-gray-400">
+                      <span>{language === 'zh' ? '颜色选择' : 'Color Selector'}</span>
+                      <span className="text-gray-900">
+                        {selectedColorIndex !== null ? product.colors[selectedColorIndex].name[language as 'zh' | 'en'] : ''}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-3">
+                      {product.colors.map((color, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            setSelectedColorIndex(idx);
+                            if (color.image) setVariantPreviewImage(color.image);
+                          }}
+                          className={`group relative w-12 h-12 rounded-full overflow-hidden border-2 transition-all p-0.5 ${selectedColorIndex === idx ? 'border-gray-900 scale-110 shadow-lg' : 'border-transparent hover:border-gray-200'
+                            }`}
+                          title={color.name[language as 'zh' | 'en']}
+                        >
+                          {color.image ? (
+                            <img src={color.image} alt="" className="w-full h-full object-cover rounded-full" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-gray-100 text-[10px] font-bold text-gray-400">
+                              {color.name[language as 'zh' | 'en']?.slice(0, 1).toUpperCase()}
+                            </div>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Size Selector */}
+                {product.sizes && product.sizes.length > 0 && (
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-gray-400">
+                      <span>{language === 'zh' ? '尺码选择' : 'Size Selection'}</span>
+                      <span className="text-gray-900">{selectedSize || ''}</span>
+                    </div>
+                    <div className="flex flex-wrap gap-3">
+                      {product.sizes.map((size, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            setSelectedSize(size.name);
+                            if (size.image) setVariantPreviewImage(size.image);
+                          }}
+                          className={`px-6 py-2.5 rounded-xl border-2 text-sm font-bold transition-all ${selectedSize === size.name
+                            ? 'bg-gray-900 border-gray-900 text-white shadow-lg scale-105'
+                            : 'border-gray-100 text-gray-900 hover:border-gray-200 bg-gray-50/50'
+                            }`}
+                        >
+                          {size.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="space-y-6">
                   <p className="text-gray-500 leading-relaxed text-lg font-light">
                     {language === 'zh'
@@ -175,7 +239,7 @@ export default function ProductDetail() {
                     }
                   </p>
 
-                  <div className="grid grid-cols-2 gap-y-4 pt-4">
+                  <div className="grid grid-cols-2 gap-y-4 pt-4 pb-4">
                     <div className="flex items-center gap-3">
                       <Layers className="w-5 h-5 text-gray-400" />
                       <div>
@@ -192,6 +256,33 @@ export default function ProductDetail() {
                       </div>
                     </div>
                   </div>
+
+                  {(product.fabric || product.notes) && (
+                    <div className="border-t border-gray-100 pt-8 space-y-8">
+                      {product.fabric && (
+                        <div>
+                          <h3 className="text-xs font-bold text-gray-900 uppercase tracking-widest mb-3 flex items-center gap-2">
+                             <span className="w-1 h-1 bg-gray-900 rounded-full" />
+                             {language === 'zh' ? '面料说明' : 'Fabric Details'}
+                          </h3>
+                          <p className="text-gray-500 text-sm leading-relaxed whitespace-pre-line">
+                            {product.fabric[language as 'zh' | 'en']}
+                          </p>
+                        </div>
+                      )}
+                      {product.notes && (
+                        <div>
+                          <h3 className="text-xs font-bold text-gray-900 uppercase tracking-widest mb-3 flex items-center gap-2">
+                             <span className="w-1 h-1 bg-gray-900 rounded-full" />
+                             {language === 'zh' ? '注意事项' : 'Important Notes'}
+                          </h3>
+                          <p className="text-gray-500 text-sm leading-relaxed whitespace-pre-line">
+                            {product.notes[language as 'zh' | 'en']}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Purchase Area */}

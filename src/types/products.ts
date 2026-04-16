@@ -29,5 +29,9 @@ export interface Product {
   releaseDate?: string;
   description?: Translation;
   isFeatured: boolean;
+  fabric?: Translation;
+  notes?: Translation;
+  sizes?: { name: string; image?: string }[];
+  colors?: { name: Translation; image?: string }[];
 }
 
