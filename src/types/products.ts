@@ -31,7 +31,9 @@ export interface Product {
   isFeatured: boolean;
   fabric?: Translation;
   notes?: Translation;
+  isActive: boolean;
   sizes?: { name: string; image?: string }[];
   colors?: { name: Translation; image?: string }[];
+  customFields?: { name: Translation; value: Translation }[];
 }
 

@@ -257,6 +257,17 @@ export default function ProductDetail() {
                     </div>
                   </div>
 
+                  {product.customFields && product.customFields.length > 0 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 pt-6 border-t border-gray-100">
+                      {product.customFields.map((field, idx) => (
+                        <div key={idx} className="flex flex-col gap-1">
+                          <p className="text-xs text-gray-400 uppercase font-bold">{field.name[language] || field.name['zh']}</p>
+                          <p className="font-bold text-gray-800">{field.value[language] || field.value['zh']}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
                   {(product.fabric || product.notes) && (
                     <div className="border-t border-gray-100 pt-8 space-y-8">
                       {product.fabric && (
