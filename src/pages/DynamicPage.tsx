@@ -11,10 +11,24 @@ export default function DynamicPage({ page }: DynamicPageProps) {
   const { language } = useLanguage();
 
   useEffect(() => {
-    // Update document title and scroll to top on nav
-    document.title = page.title[language as 'zh' | 'en'];
+    // 1. 设置网页标题 (优先使用 SEO 标题)
+    const pageTitle = page.seo?.title?.[language as 'zh' | 'en'] || page.title[language as 'zh' | 'en'];
+    document.title = pageTitle;
+
+    // 2. 设置 Meta Description
+    const metaDesc = page.seo?.description?.[language as 'zh' | 'en'];
+    if (metaDesc) {
+      let metaTag = document.querySelector('meta[name="description"]');
+      if (!metaTag) {
+        metaTag = document.createElement('meta');
+        metaTag.setAttribute('name', 'description');
+        document.head.appendChild(metaTag);
+      }
+      metaTag.setAttribute('content', metaDesc);
+    }
+
     window.scrollTo(0, 0);
-  }, [page.title, language]);
+  }, [page, language]);
 
   return (
     <main className="min-h-screen">
