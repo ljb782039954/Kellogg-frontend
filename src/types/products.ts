@@ -22,6 +22,7 @@ export interface Product {
   originalPrice?: number;
   image: string;
   images: string[];
+  videos: string[];
   rating: number;
   sales: number;
   tag?: Translation;

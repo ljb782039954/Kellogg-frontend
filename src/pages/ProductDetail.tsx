@@ -9,6 +9,7 @@ import {
 import { useLanguage } from '../context/LanguageContext';
 import { useProductDetail } from '../hooks/useProductDetail';
 import { useCurrency } from '../context/CurrencyContext';
+import ProductVideo from '../components/ProductVideo';
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
@@ -313,6 +314,27 @@ export default function ProductDetail() {
           </div>
         </div>
       </main>
+
+      {/* Video Section */}
+      {product.videos && product.videos.length > 0 && (
+        <section className="bg-white py-20 border-t border-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto space-y-12">
+              <div className="text-center space-y-4">
+                <h2 className="text-3xl font-bold text-gray-900">
+                  {language === 'zh' ? '视频展示' : 'Video Showcase'}
+                </h2>
+                <div className="w-12 h-1 bg-gray-900 mx-auto rounded-full" />
+              </div>
+              <div className="grid grid-cols-1 gap-12">
+                {product.videos.map((vid, idx) => (
+                  <ProductVideo key={idx} url={vid} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Recommended Section (Simplified) */}
       <section className="bg-gray-50 py-24">

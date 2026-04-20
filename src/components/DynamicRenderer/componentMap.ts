@@ -28,6 +28,7 @@ const PartnerLogos = lazy(() => import('@/components/blocks/PartnerLogos'));
 const Gallery = lazy(() => import('@/components/blocks/Gallery'));
 const FeatureList = lazy(() => import('@/components/blocks/FeatureList'));
 const CtaBanner = lazy(() => import('@/components/blocks/CtaBanner'));
+const VideoSection = lazy(() => import('@/components/blocks/VideoSection'));
 
 
 
@@ -50,6 +51,7 @@ export const componentMap: Partial<Record<BlockType, ComponentType<BlockProps>>>
   gallery: Gallery as ComponentType<BlockProps>,
   featureList: FeatureList as ComponentType<BlockProps>,
   ctaBanner: CtaBanner as ComponentType<BlockProps>,
+  videoSection: VideoSection as ComponentType<BlockProps>,
 };
 
 // 获取组件

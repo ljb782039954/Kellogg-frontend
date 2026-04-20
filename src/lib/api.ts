@@ -231,6 +231,11 @@ export const api = {
     }
     return url;
   },
+
+  submitInquiry: (data: any) => request('/api/inquiries/submit', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  }),
 };
 
 export default api;

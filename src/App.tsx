@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 // Pages
 import DynamicPage from './pages/DynamicPage';
 import ProductDetail from './pages/ProductDetail';
+import Inquiry from './pages/Inquiry';
 
 function AppRoutes() {
   const { content } = useContent();
@@ -31,6 +32,7 @@ function AppRoutes() {
 
           {/* Fixed Dynamic Route for relational Models */}
           <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/inquiry" element={<Inquiry />} />
 
           {/* Catch-all fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
