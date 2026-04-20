@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, Loader2, CheckCircle2, Globe, Building2, Package } from 'lucide-react';
+import { Phone, MapPin, Send, Loader2, CheckCircle2, Globe, Building2, Package } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useContent } from '../context/ContentContext';
 import { api } from '@/lib/api';

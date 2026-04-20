@@ -1,4 +1,4 @@
-import React from 'react';
+
 import ProductVideo from '../ProductVideo';
 
 interface VideoSectionProps {
