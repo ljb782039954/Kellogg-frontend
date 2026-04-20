@@ -37,8 +37,8 @@ export default function Inquiry() {
     }
   };
 
-  const contactInfo = content?.site_settings?.company || {
-    address: 'Guangzhou, China',
+  const contactInfo = content?.companyInfo?.contact || {
+    address: { zh: '中国 广州', en: 'Guangzhou, China' },
     phone: '+86 123 4567 8900',
     email: 'contact@kellogg.com'
   };
@@ -117,7 +117,11 @@ export default function Inquiry() {
                     </div>
                     <div>
                       <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{t.sidebar.location}</h4>
-                      <p className="text-gray-900 font-medium">{contactInfo.address}</p>
+                      <p className="text-gray-900 font-medium">
+                        {typeof contactInfo.address === 'string' 
+                          ? contactInfo.address 
+                          : contactInfo.address[language as 'zh' | 'en']}
+                      </p>
                     </div>
                   </div>
 

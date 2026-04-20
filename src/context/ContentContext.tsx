@@ -33,6 +33,10 @@ export function ContentProvider({ children }: { children: ReactNode }) {
         api.getConfig<CustomPage[]>('pages'),
       ]);
 
+      if (!siteSettings || !headerConfig || !footerConfig || !pagesData) {
+        throw new Error('Missing essential site configuration. Please initialize the system.');
+      }
+
       setContent({
         companyInfo: siteSettings as CompanyInfo,
         header: headerConfig as HeaderContent,
