@@ -26,13 +26,18 @@ function AppRoutes() {
             <Route
               key={page.id}
               path={page.path}
-              element={<DynamicPage page={page} />}
+              element={
+                page.id === 'system-inquiry' ? (
+                  <Inquiry />
+                ) : (
+                  <DynamicPage page={page} />
+                )
+              }
             />
           ))}
 
           {/* Fixed Dynamic Route for relational Models */}
           <Route path="/product/:id" element={<ProductDetail />} />
-          <Route path="/inquiry" element={<Inquiry />} />
 
           {/* Catch-all fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
