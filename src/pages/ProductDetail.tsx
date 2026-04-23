@@ -259,11 +259,11 @@ export default function ProductDetail() {
                   </div>
 
                   {product.customFields && product.customFields.length > 0 && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 pt-6 border-t border-gray-100">
+                    <div className="grid grid-cols-1 gap-y-6 pt-6 border-t border-gray-100">
                       {product.customFields.map((field, idx) => (
                         <div key={idx} className="flex flex-col gap-1">
-                          <p className="text-xs text-gray-400 uppercase font-bold">{field.name[language] || field.name['zh']}</p>
-                          <p className="font-bold text-gray-800">{field.value[language] || field.value['zh']}</p>
+                          <p className="text-xs text-gray-500 uppercase font-bold">{field.name[language] || field.name['zh']}</p>
+                          <p className="text-gray-600">{field.value[language] || field.value['zh']}</p>
                         </div>
                       ))}
                     </div>
@@ -274,8 +274,8 @@ export default function ProductDetail() {
                       {product.fabric && (
                         <div>
                           <h3 className="text-xs font-bold text-gray-900 uppercase tracking-widest mb-3 flex items-center gap-2">
-                             <span className="w-1 h-1 bg-gray-900 rounded-full" />
-                             {language === 'zh' ? '面料说明' : 'Fabric Details'}
+                            <span className="w-1 h-1 bg-gray-900 rounded-full" />
+                            {language === 'zh' ? '面料说明' : 'Fabric Details'}
                           </h3>
                           <p className="text-gray-500 text-sm leading-relaxed whitespace-pre-line">
                             {product.fabric[language as 'zh' | 'en']}
@@ -285,8 +285,8 @@ export default function ProductDetail() {
                       {product.notes && (
                         <div>
                           <h3 className="text-xs font-bold text-gray-900 uppercase tracking-widest mb-3 flex items-center gap-2">
-                             <span className="w-1 h-1 bg-gray-900 rounded-full" />
-                             {language === 'zh' ? '注意事项' : 'Important Notes'}
+                            <span className="w-1 h-1 bg-gray-900 rounded-full" />
+                            {language === 'zh' ? '注意事项' : 'Important Notes'}
                           </h3>
                           <p className="text-gray-500 text-sm leading-relaxed whitespace-pre-line">
                             {product.notes[language as 'zh' | 'en']}
