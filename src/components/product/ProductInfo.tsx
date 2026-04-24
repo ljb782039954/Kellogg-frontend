@@ -21,6 +21,7 @@ export default function ProductInfo({
   onShare,
   language
 }: ProductInfoProps) {
+  const isShowPrice = false;
   return (
     <div className="space-y-8">
       <div>
@@ -46,13 +47,14 @@ export default function ProductInfo({
           </button>
         </div>
       </div>
-
-      <div className="flex items-baseline gap-4 border-b border-gray-100 pb-8">
-        <span className="text-5xl font-bold text-gray-900">{formatPrice(price)}</span>
-        {originalPrice && (
-          <span className="text-2xl text-gray-300 line-through">{formatPrice(originalPrice)}</span>
-        )}
-      </div>
+      {isShowPrice &&
+        <div className="flex items-baseline gap-4 border-b border-gray-100 pb-8">
+          <span className="text-5xl font-bold text-gray-900">{formatPrice(price)}</span>
+          {originalPrice && (
+            <span className="text-2xl text-gray-300 line-through">{formatPrice(originalPrice)}</span>
+          )}
+        </div>
+      }
     </div>
   );
 }
