@@ -1,5 +1,3 @@
 User-agent: *
 Allow: /
-
-# Sitemap Location
 Sitemap: https://kelloggfashion.com/sitemap.xml

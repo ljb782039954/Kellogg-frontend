@@ -39,25 +39,31 @@ async function generateSitemap() {
   const urls = [];
 
   try {
-    // 1. 定义您指定的 4 个核心页面
-    console.log('Generating entries for primary pages...');
-    const primaryPages = [
-      { path: '/', priority: '1.0', changefreq: 'daily' },
-      { path: '/products', priority: '0.8', changefreq: 'weekly' },
-      { path: '/about', priority: '0.8', changefreq: 'monthly' },
-      { path: '/faq', priority: '0.8', changefreq: 'monthly' },
+    // 1. 定义核心页面结构
+    console.log('Generating entries for primary pages (Bilingual)...');
+    const basePages = [
+      { path: '', priority: '1.0', changefreq: 'daily' },
+      { path: '/products', priority: '0.9', changefreq: 'weekly' },
+      { path: '/about', priority: '0.7', changefreq: 'monthly' },
+      { path: '/faq', priority: '0.6', changefreq: 'monthly' },
+      // SEO 策略新增：地理位置/市场着陆页
+      { path: '/usa-clothing-supplier', priority: '0.9', changefreq: 'weekly' },
+      { path: '/uk-fashion-wholesale', priority: '0.9', changefreq: 'weekly' },
+      { path: '/europe-heavyweight-apparel', priority: '0.9', changefreq: 'weekly' },
     ];
 
-    primaryPages.forEach(page => {
-      urls.push({
-        loc: `${SITE_URL}${page.path}`,
-        lastmod: new Date().toISOString().split('T')[0],
-        changefreq: page.changefreq,
-        priority: page.priority
+    const languages = ['', '/zh']; // 空字符串代表默认英文，/zh 代表中文
+
+    basePages.forEach(page => {
+      languages.forEach(lang => {
+        urls.push({
+          loc: `${SITE_URL}${lang}${page.path}`,
+          lastmod: new Date().toISOString().split('T')[0],
+          changefreq: page.changefreq,
+          priority: page.priority
+        });
       });
     });
-
-    // 2. (已根据要求移除商品和动态页面抓取)
 
     // 4. 生成 XML
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
