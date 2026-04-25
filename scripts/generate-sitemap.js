@@ -49,23 +49,24 @@ async function generateSitemap() {
       // SEO GEO 战略着陆页矩阵
       { path: '/usa-heavyweight-hoodie-manufacturer', priority: '0.9', changefreq: 'weekly' },
       { path: '/uk-streetwear-clothing-manufacturer', priority: '0.9', changefreq: 'weekly' },
-      { path: '/canada-blank-apparel-supplier', priority: '0.9', changefreq: 'weekly' },
+      // { path: '/canada-blank-apparel-supplier', priority: '0.9', changefreq: 'weekly' },
       { path: '/australia-heavyweight-tshirt-supplier', priority: '0.9', changefreq: 'weekly' },
-      { path: '/germany-streetwear-manufacturer', priority: '0.9', changefreq: 'weekly' },
-      { path: '/europe-blank-clothing-wholesale', priority: '0.9', changefreq: 'weekly' },
+      // { path: '/germany-streetwear-manufacturer', priority: '0.9', changefreq: 'weekly' },
+      // { path: '/europe-blank-clothing-wholesale', priority: '0.9', changefreq: 'weekly' },
     ];
 
-    const languages = ['', '/zh']; // 空字符串代表默认英文，/zh 代表中文
+    // const languages = ['', '/zh']; // 空字符串代表默认英文，/zh 代表中文
+    const languages = ['']; // 空字符串代表默认英文，没有zh
 
     basePages.forEach(page => {
       languages.forEach(lang => {
-        urls.push({
+      urls.push({
           loc: `${SITE_URL}${lang}${page.path}`,
-          lastmod: new Date().toISOString().split('T')[0],
-          changefreq: page.changefreq,
-          priority: page.priority
-        });
+        lastmod: new Date().toISOString().split('T')[0],
+        changefreq: page.changefreq,
+        priority: page.priority
       });
+    });
     });
 
     // 4. 生成 XML

@@ -28,7 +28,7 @@ const SEOManager: React.FC<SEOManagerProps> = ({
     // 1. 获取本地代码配置作为兜底
     const cleanPath = pagePath.replace(/^\//, '') || '';
     const override = SEO_CONFIG.pageOverrides[cleanPath as keyof typeof SEO_CONFIG.pageOverrides];
-    
+
     // 2. 优先级：后台填写的 SEO > 代码覆盖配置 > 默认标题
     const finalTitle = seoData?.title?.[language] || override?.title[language] || fallbackTitle;
     const finalDesc = seoData?.description?.[language] || override?.description[language] || '';
@@ -88,27 +88,30 @@ const SEOManager: React.FC<SEOManagerProps> = ({
         "latitude": SEO_CONFIG.company.coordinates.latitude,
         "longitude": SEO_CONFIG.company.coordinates.longitude
       },
-      "areaServed": targetCountry !== 'Worldwide' 
-        ? ["Worldwide", targetCountry] 
+      "areaServed": targetCountry !== 'Worldwide'
+        ? ["Worldwide", targetCountry]
         : ["Worldwide", "USA", "Europe", "UK", "Australia"],
       "knowsAbout": ["Heavyweight Hoodies", "Streetwear Manufacturing", "Custom Apparel"]
     };
     scriptTag.text = JSON.stringify(structuredData);
 
-    // 6. Hreflang 注入 (简单实现)
-    const updateLinkRel = (rel: string, hreflang: string, href: string) => {
-      let link = document.querySelector(`link[rel="${rel}"][hreflang="${hreflang}"]`);
+    // 6. 自动注入 Canonical Tag (规范网址)
+    const updateLinkRel = (rel: string, href?: string) => {
+      const selector = `link[rel="${rel}"]`;
+      let link = document.querySelector(selector);
+
       if (!link) {
         link = document.createElement('link');
         link.setAttribute('rel', rel);
-        link.setAttribute('hreflang', hreflang);
         document.head.appendChild(link);
       }
-      link.setAttribute('href', href);
+      link.setAttribute('href', href || '');
     };
 
-    updateLinkRel('alternate', 'en', `${window.location.origin}/`);
-    updateLinkRel('alternate', 'zh', `${window.location.origin}/zh`);
+    // 注入 Canonical 标签 (极其重要，防止内容重复惩罚)
+    // 强制使用基础路径，去除可能导致内容重复的参数或 Hash
+    const currentUrl = `${window.location.origin}${pagePath}`;
+    updateLinkRel('canonical', currentUrl);
 
     return () => {
       // 卸载时不需要特别清理，因为这些是全局 header
