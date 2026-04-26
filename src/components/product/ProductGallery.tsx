@@ -1,4 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
+import api from '@/lib/api';
+// import { OptimizedImage } from '../ui/OptimizedImage';
 
 interface ProductGalleryProps {
   gallery: string[];
@@ -24,7 +26,8 @@ export default function ProductGallery({
         <AnimatePresence mode="wait">
           <motion.img
             key={variantPreviewImage || gallery[activeImageIndex]}
-            src={variantPreviewImage || gallery[activeImageIndex]}
+            src={api.getOptimizedImageUrl(variantPreviewImage || gallery[activeImageIndex], 1200)}
+            srcSet={`${api.getOptimizedImageUrl(variantPreviewImage || gallery[activeImageIndex], 2000)} 2x`}
             alt={productName}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -47,11 +50,10 @@ export default function ProductGallery({
           <button
             key={idx}
             onClick={() => setActiveImageIndex(idx)}
-            className={`relative w-24 aspect-square rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all ${
-              activeImageIndex === idx ? 'border-gray-900' : 'border-transparent hover:border-gray-200'
-            }`}
+            className={`relative w-24 aspect-square rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all ${activeImageIndex === idx ? 'border-gray-900' : 'border-transparent hover:border-gray-200'
+              }`}
           >
-            <img src={img} alt="" className="w-full h-full object-cover" />
+            <img src={img} alt={productName} className="w-full h-full object-cover" />
           </button>
         ))}
       </div>

@@ -12,7 +12,7 @@ export default function Testimonials({ t, props }: Props) {
   const { title, subtitle, items } = props;
 
   // 如果没有数据，直接返回null
-  if (items.length === 0) return null;
+  if (!items || items.length === 0) return null;
 
   return (
     <section className="py-12 w-full">

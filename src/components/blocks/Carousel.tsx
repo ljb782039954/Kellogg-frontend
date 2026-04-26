@@ -50,7 +50,7 @@ export default function Carousel({ t, props }: Props) {
   }, [nextSlide, autoPlay, interval, items.length]);
 
   // 如果没有数据，直接返回null
-  if (items.length === 0) return null;
+  if (!items || items.length === 0) return null;
 
   const slide = items[currentIndex];
   if (!slide) return null;

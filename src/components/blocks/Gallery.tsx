@@ -15,7 +15,7 @@ export default function Gallery({ t, props }: Props) {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
 
   // 如果没有数据，直接返回null
-  if (items.length === 0) return null;
+  if (!items || items.length === 0) return null;
 
   const containerVariants = {
     hidden: { opacity: 0 },

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import type { ImageTextProps } from '@/types';
 
 interface Props {
@@ -12,6 +13,24 @@ export default function ImageText({
 }: Props) {
   const { title, content, image,
     imagePosition = 'left', buttonText, buttonLink } = props;
+
+  // 判断并获取内部链接路径
+  const getInternalPath = (link: string | undefined) => {
+    if (!link) return null;
+    if (link.startsWith('/')) return link;
+    try {
+      const url = new URL(link);
+      // 如果 origin 相同，或者是本地开发环境
+      if (url.origin === window.location.origin) {
+        return url.pathname + url.search + url.hash;
+      }
+    } catch (e) {
+      // 不是有效的绝对 URL，保持原样
+    }
+    return null;
+  };
+
+  const internalPath = getInternalPath(buttonLink);
 
   return (
     <section className="py-12">
@@ -42,11 +61,19 @@ export default function ImageText({
               {t(content)}
             </p>
             {buttonText && buttonLink && (
-              <a href={buttonLink}>
-                <button className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
-                  {t(buttonText)}
-                </button>
-              </a>
+              internalPath ? (
+                <Link to={internalPath}>
+                  <button className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                    {t(buttonText)}
+                  </button>
+                </Link>
+              ) : (
+                <a href={buttonLink} target="_blank" rel="noopener noreferrer">
+                  <button className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                    {t(buttonText)}
+                  </button>
+                </a>
+              )
             )}
           </div>
         </motion.div>

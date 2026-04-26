@@ -10,7 +10,7 @@ interface Props {
 export default function BrandValues({ t, props }: Props) {
   const { title, subtitle, items } = props;
 
-  if (items.length === 0) return null;
+  if (!items || items.length === 0) return null;
 
   return (
     <section className="py-12 w-full">

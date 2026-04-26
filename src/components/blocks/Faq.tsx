@@ -16,13 +16,14 @@ export default function Faq({ t, props }: Props) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
+
   const hasMore = items.length > 5;
   const displayedItems = isExpanded ? items : items.slice(0, 5);
 
   const toggleExpand = () => setIsExpanded(!isExpanded);
 
   // 如果没有数据，直接返回null
-  if (items.length === 0) return null;
+  if (!items || items.length === 0) return null;
 
   return (
     <section className="py-8">

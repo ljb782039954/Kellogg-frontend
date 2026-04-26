@@ -4,7 +4,6 @@ interface ProductExtraInfoProps {
   description: any;
   category: any;
   releaseDate?: string;
-  customFields?: { name: any; value: any }[];
   fabric?: any;
   notes?: any;
   t: (obj: any) => string;
@@ -15,7 +14,6 @@ export default function ProductExtraInfo({
   description,
   category,
   releaseDate,
-  customFields,
   fabric,
   notes,
   t,
@@ -46,38 +44,6 @@ export default function ProductExtraInfo({
           </div>
         </div>
       </div>
-
-      {/* Custom Fields */}
-      {customFields && customFields.length > 0 && (
-        <div className="grid grid-cols-1 gap-y-6 pt-6 border-t border-gray-100">
-          {customFields.map((field, idx) => {
-            const value = t(field.value);
-            // 匹配分号或冒号进行拆分
-            const parts = value.split(/[;；]/).map(p => p.trim()).filter(p => p !== '');
-
-            return (
-              <div key={idx} className="flex flex-col gap-1">
-                <p className="text-xs text-gray-500 uppercase font-bold">{t(field.name)}</p>
-                {parts.length > 1 ? (
-                  <ul className="space-y-1.5 mt-1">
-                    {parts.map((part, i) => (
-                      <li key={i} className="flex items-start gap-2 text-gray-600 text-sm leading-relaxed">
-                        <span className="text-gray-900 font-black text-lg -mt-1">·</span>
-                        <span>{part}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <li className="flex items-start gap-2 text-gray-600 text-sm leading-relaxed">
-                    <span className="text-gray-900 font-black text-lg -mt-1">·</span>
-                    <p className="text-gray-600">{value}</p>
-                  </li>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
 
       {/* Fabric & Notes */}
       {(fabric || notes) && (

@@ -15,7 +15,7 @@ export default function FeaturedProducts({ t, props, products }: Props) {
   const displayedProducts = maxItems ? products.slice(0, maxItems) : products;
 
   // 如果没有数据，直接返回null
-  if (displayedProducts.length === 0) return null;
+  if (!displayedProducts || displayedProducts.length === 0) return null;
 
   return (
     <section className="py-8 w-full">

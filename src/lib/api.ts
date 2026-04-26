@@ -232,6 +232,13 @@ export const api = {
     return url;
   },
 
+  /**
+   * 获取优化后的图片 URL (目前因 Cloudflare 订阅限制，回退为返回原图)
+   */
+  getOptimizedImageUrl: (url: string | null | undefined, _width: number, _quality = 80): string => {
+    return api.resolveMediaUrl(url);
+  },
+
   submitInquiry: (data: any) => request('/api/inquiries/submit', {
     method: 'POST',
     body: JSON.stringify(data)

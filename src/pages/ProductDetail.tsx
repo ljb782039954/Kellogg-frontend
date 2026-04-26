@@ -11,6 +11,7 @@ import ProductGallery from '../components/product/ProductGallery';
 import ProductInfo from '../components/product/ProductInfo';
 import ProductVariants from '../components/product/ProductVariants';
 import ProductExtraInfo from '../components/product/ProductExtraInfo';
+import ProductCustomFields from '../components/product/ProductCustomFields';
 import RelatedProducts from '../components/product/RelatedProducts';
 import ProductBulkPricing from '../components/product/ProductBulkPricing';
 
@@ -150,14 +151,22 @@ export default function ProductDetail() {
                   description={product.description}
                   category={product.category}
                   releaseDate={product.releaseDate}
-                  customFields={product.customFields}
                   fabric={product.fabric}
                   notes={product.notes}
                   t={t}
                   language={language}
                 />
+
               </div>
             </div>
+          </div>
+
+          <div className='px-4 py-8 '>
+
+            <ProductCustomFields
+              customFields={product.customFields}
+              t={t}
+            />
           </div>
         </div>
       </main>

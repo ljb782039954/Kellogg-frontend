@@ -13,7 +13,7 @@ export default function Categories({ t, props, categories }: Props) {
   const displayCategories = showAll ? categories : categories.slice(0, maxItems);
 
   // 如果没有数据，直接返回null
-  if (displayCategories.length === 0) return null;
+  if (!displayCategories || displayCategories.length === 0) return null;
 
   return (
     <section className="py-12 w-full">
@@ -23,13 +23,15 @@ export default function Categories({ t, props, categories }: Props) {
             return (
               <div key={cat.id} className="text-center group cursor-pointer">
                 <div className="
-              w-16 h-16 mx-auto bg-white rounded-full 
-              flex items-center justify-center shadow-sm mb-2 
-              group-hover:shadow-md group-hover:scale-105 transition-all
-              ">
-                  <img src={cat.image} alt={t(cat.name)} className="
-                rounded-full
-                text-gray-600 group-hover:text-primary transition-colors" />
+                  w-full aspect-[1/1.5] max-w-[60px] mx-auto bg-white rounded-full 
+                  overflow-hidden flex items-center justify-center shadow-sm mb-2 
+                  group-hover:shadow-md group-hover:scale-105 transition-all
+                ">
+                  <img
+                    src={cat.image}
+                    alt={t(cat.name)}
+                    className="w-full h-full object-cover text-gray-600 group-hover:text-primary transition-colors"
+                  />
                 </div>
                 <span className="text-sm font-medium group-hover:text-primary transition-colors">
                   {t(cat.name)}

@@ -17,7 +17,7 @@ export default function NewArrivals({ t, props, products }: Props) {
   }, [products, maxItems]);
 
   // 如果没有数据，直接返回null
-  if (displayProducts.length === 0) return null;
+  if (!displayProducts || displayProducts.length === 0) return null;
 
   return (
     <section className="py-8">
