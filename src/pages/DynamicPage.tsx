@@ -11,8 +11,8 @@ interface DynamicPageProps {
 export default function DynamicPage({ page }: DynamicPageProps) {
   const { language } = useLanguage();
 
-  const defaultTitle = page.seo?.title?.[language as 'zh' | 'en'] || page.title[language as 'zh' | 'en'];
-  const defaultDescription = page.seo?.description?.[language as 'zh' | 'en'] || '';
+  // const defaultTitle = page.seo?.title?.[language as 'zh' | 'en'] || page.title[language as 'zh' | 'en'];
+  // const defaultDescription = page.seo?.description?.[language as 'zh' | 'en'] || '';
 
   return (
     <main className="min-h-screen">
