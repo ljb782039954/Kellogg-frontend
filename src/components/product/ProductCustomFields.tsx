@@ -21,7 +21,7 @@ export default function ProductCustomFields({
 
             return (
               <div key={idx} className="flex flex-col gap-1 ">
-                <p className="text-sm text-gray-500 uppercase font-bold">{t(field.name)}</p>
+                <p className="text-sm text-gray-500 uppercase font-bold">{idx + 1}:{t(field.name)}</p>
 
                 {parts.length > 1 ? (
                   <ul className="space-y-1.5 mt-1">
