@@ -16,8 +16,8 @@ export default function ProductCustomFields({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-16 pt-6 border-t border-gray-100">
           {customFields.map((field, idx) => {
             const value = t(field.value);
-            // 匹配分号或冒号进行拆分
-            const parts = value.split(/[;；]/).map(p => p.trim()).filter(p => p !== '');
+            // 匹配双正斜杠 // 或双反斜杠 \\ 进行拆分
+            const parts = value.split(/\/\/|\\\\/).map(p => p.trim()).filter(p => p !== '');
 
             return (
               <div key={idx} className="flex flex-col gap-1 ">

@@ -35,7 +35,7 @@ export default function ProductInfo({
           </div>
         </div>
         <div className="flex justify-between items-start">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-relaxed">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-relaxed">
             {name}
           </h1>
           <button
