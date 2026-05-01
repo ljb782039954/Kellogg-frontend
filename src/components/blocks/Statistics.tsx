@@ -2,7 +2,19 @@ import MotionHeaderDark from "../custom/motionHeaderDark";
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
-import type { StatisticProps } from "@/types";
+import type { Translation } from "@/types";
+
+export interface Statistic {
+  id: number;
+  value: string;
+  label: Translation;
+}
+
+export interface StatisticProps {
+  title?: Translation;
+  subtitle?: Translation;
+  items?: Statistic[];
+}
 
 interface Props {
   t: (obj: { zh: string; en: string }) => string;

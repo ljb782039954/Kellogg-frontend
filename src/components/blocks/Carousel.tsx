@@ -1,7 +1,22 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import type { CarouselProps } from '@/types';
+import type { Translation, NavLink } from '@/types';
+
+export interface CarouselValues {
+  id: number;
+  image: string;
+  title: Translation;
+  subtitle?: Translation;
+  cta?: Translation;
+  link: NavLink;
+}
+
+export interface CarouselProps {
+  autoPlay?: boolean;
+  interval?: number;
+  items?: CarouselValues[];
+}
 
 interface Props {
   t: (obj: { zh: string; en: string }) => string;

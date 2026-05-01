@@ -4,6 +4,7 @@ import { Phone, MapPin, Send, Loader2, CheckCircle2, Globe, Building2, Package }
 import { useLanguage } from '../context/LanguageContext';
 import { useContent } from '../context/ContentContext';
 import { api } from '@/lib/api';
+import SEOManager from '../components/seo/SEOManager';
 
 export default function Inquiry() {
   const { language } = useLanguage();
@@ -90,6 +91,11 @@ export default function Inquiry() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOManager 
+        pagePath="/inquiry"
+        fallbackTitle={config.title[language as 'zh' | 'en']}
+        language={language as 'zh' | 'en'}
+      />
       <div className="pt-24 pb-20">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">

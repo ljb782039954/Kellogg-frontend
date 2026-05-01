@@ -1,7 +1,19 @@
 import * as LucideIcons from 'lucide-react';
 import MotionHeader from '../custom/motionHeader';
 import { motion } from 'framer-motion';
-import type { FeatureListProps } from '@/types';
+import type { Translation } from '@/types';
+
+export interface FeatureListValues {
+  icon: string;
+  title: Translation;
+  description: Translation;
+}
+
+export interface FeatureListProps {
+  title?: Translation;
+  subtitle?: Translation;
+  items?: FeatureListValues[];
+}
 
 interface Props extends FeatureListProps {
   t: (obj: { zh: string; en: string }) => string;

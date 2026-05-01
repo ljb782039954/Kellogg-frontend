@@ -1,7 +1,13 @@
 import MotionHeader from '../custom/motionHeader';
 import { Link } from 'react-router-dom';
 import ProductCardFeatured from '../custom/ProductCardFeatured';
-import type { Product, FeaturedProductsProps } from '@/types';
+import type { Translation, Product } from '@/types';
+
+export interface FeaturedProductsProps {
+  title?: Translation;
+  subtitle?: Translation;
+  maxItems?: number;
+}
 
 interface Props {
   t: (obj: { zh: string; en: string }) => string;

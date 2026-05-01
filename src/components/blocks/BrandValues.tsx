@@ -1,6 +1,19 @@
 import * as LucideIcons from 'lucide-react';
 import MotionHeader from '../custom/motionHeader';
-import type { BrandValuesProps, } from '@/types';
+import type { Translation } from '@/types';
+
+export interface BrandValue {
+  id: number;
+  icon: string;
+  title: Translation;
+  description: Translation;
+}
+
+export interface BrandValuesProps {
+  title?: Translation;
+  subtitle?: Translation;
+  items?: BrandValue[];
+}
 
 interface Props {
   t: (obj: { zh: string; en: string }) => string;

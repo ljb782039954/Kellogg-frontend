@@ -22,6 +22,7 @@ const ProductGrid = lazy(() => import('@/components/blocks/ProductGrid'));
 const Faq = lazy(() => import('@/components/blocks/Faq'));
 const TextSection = lazy(() => import('@/components/blocks/TextSection'));
 const ImageBanner = lazy(() => import('@/components/blocks/ImageBanner'));
+const ImageFull = lazy(() => import('@/components/blocks/ImageFull'));
 const ImageText = lazy(() => import('@/components/blocks/ImageText'));
 const Countdown = lazy(() => import('@/components/blocks/Countdown'));
 const PartnerLogos = lazy(() => import('@/components/blocks/PartnerLogos'));
@@ -45,6 +46,7 @@ export const componentMap: Partial<Record<BlockType, ComponentType<BlockProps>>>
   faq: Faq as ComponentType<BlockProps>,
   textSection: TextSection as ComponentType<BlockProps>,
   imageBanner: ImageBanner as ComponentType<BlockProps>,
+  imageFull: ImageFull as ComponentType<BlockProps>,
   imageText: ImageText as ComponentType<BlockProps>,
   countdown: Countdown as ComponentType<BlockProps>,
   partnerLogos: PartnerLogos as ComponentType<BlockProps>,

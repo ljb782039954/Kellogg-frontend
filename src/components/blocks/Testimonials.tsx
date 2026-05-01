@@ -1,7 +1,21 @@
 import * as LucideIcons from 'lucide-react';
 import MotionHeader from '../custom/motionHeader';
 import { motion } from 'framer-motion';
-import type { TestimonialProps } from '@/types';
+import type { Translation } from '@/types';
+
+export interface Testimonial {
+  id: number;
+  name: Translation;
+  role?: Translation;
+  content: Translation;
+  avatar?: string;
+}
+export interface TestimonialProps {
+  title?: Translation;
+  subtitle?: Translation;
+  maxItems?: number;
+  items?: Testimonial[];
+}
 
 interface Props {
   t: (obj: { zh: string; en: string }) => string;

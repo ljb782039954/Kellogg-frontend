@@ -58,34 +58,42 @@ async function generateSitemap() {
     // const languages = ['', '/zh']; // 空字符串代表默认英文，/zh 代表中文
     const languages = ['']; // 空字符串代表默认英文，没有zh
 
+    // Use a Set to track locations and prevent duplicates
+    const seenLocs = new Set();
+    const uniqueUrls = [];
+
     basePages.forEach(page => {
       languages.forEach(lang => {
-      urls.push({
-          loc: `${SITE_URL}${lang}${page.path}`,
-        lastmod: new Date().toISOString().split('T')[0],
-        changefreq: page.changefreq,
-        priority: page.priority
+        const loc = `${SITE_URL}${lang}${page.path}`;
+        if (!seenLocs.has(loc)) {
+          seenLocs.add(loc);
+          uniqueUrls.push({
+            loc: loc,
+            lastmod: new Date().toISOString().split('T')[0],
+            changefreq: page.changefreq,
+            priority: page.priority
+          });
+        }
       });
-    });
     });
 
     // 4. 生成 XML
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map(url => `  <url>
-    <loc>${url.loc}</loc>
-    <lastmod>${url.lastmod}</lastmod>
-    <changefreq>${url.changefreq}</changefreq>
-    <priority>${url.priority}</priority>
-  </url>`).join('\n')}
-</urlset>`;
+  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  ${uniqueUrls.map(url => `  <url>
+      <loc>${url.loc}</loc>
+      <lastmod>${url.lastmod}</lastmod>
+      <changefreq>${url.changefreq}</changefreq>
+      <priority>${url.priority}</priority>
+    </url>`).join('\n')}
+  </urlset>`;
 
     // 5. 写入文件
     if (!fs.existsSync(PUBLIC_DIR)) {
       fs.mkdirSync(PUBLIC_DIR, { recursive: true });
     }
     fs.writeFileSync(SITEMAP_PATH, xml);
-    console.log(`Successfully generated sitemap with ${urls.length} URLs at ${SITEMAP_PATH}`);
+    console.log(`Successfully generated sitemap with ${uniqueUrls.length} URLs at ${SITEMAP_PATH}`);
 
   } catch (error) {
     console.error('Error generating sitemap:', error);

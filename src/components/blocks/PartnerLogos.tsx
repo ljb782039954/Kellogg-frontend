@@ -1,5 +1,18 @@
 import MotionHeader from "../custom/motionHeader";
-import type { PartnerProps } from '@/types';
+import type { Translation } from '@/types';
+
+export interface Partner {
+  logo: string;
+  name: string;
+  color?: string;
+  link?: string;
+}
+
+export interface PartnerProps {
+  title?: Translation;
+  subtitle?: Translation;
+  items?: Partner[];
+}
 
 interface Props {
   t: (obj: { zh: string; en: string }) => string;

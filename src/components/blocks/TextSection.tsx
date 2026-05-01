@@ -1,4 +1,12 @@
-import type { TextSectionProps } from '@/types';
+import type { Translation } from '@/types';
+
+export interface TextSectionProps {
+  title?: Translation;
+  content?: Translation;
+  alignment?: 'left' | 'center' | 'right';
+  paddingY?: 'small' | 'medium' | 'large';
+  backgroundColor?: string;
+}
 
 interface Props {
   t: (obj: { zh: string; en: string }) => string;

@@ -1,5 +1,9 @@
+import type { Category } from '@/types';
 
-import type { CategoriesProps, Category } from '@/types';
+export interface CategoriesProps {
+  showAll?: boolean;
+  maxItems?: number;
+}
 
 interface Props {
   t: (obj: { zh: string; en: string }) => string; // 翻译函数

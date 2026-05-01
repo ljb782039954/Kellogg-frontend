@@ -1,7 +1,13 @@
 import MotionHeader from '../custom/motionHeader';
 import ProductCardNew from '../custom/productCardNew';
-import type { NewArrivalsProps, Product } from '@/types';
 import { useMemo } from 'react';
+import type { Translation, Product } from '@/types';
+
+export interface NewArrivalsProps {
+  title?: Translation;
+  subtitle?: Translation;
+  maxItems?: number;
+}
 
 interface Props {
   t: (obj: { zh: string; en: string }) => string;

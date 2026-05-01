@@ -1,6 +1,20 @@
 import { cn } from '@/lib/utils';
 import MotionHeaderDark from '../custom/motionHeaderDark';
-import type { CtaBannerProps } from '@/types';
+import type { Translation, NavLink } from '@/types';
+
+export interface CtaBannerValues {
+  primaryButton?: NavLink;
+  secondaryButton?: NavLink;
+  backgroundImage?: string;
+  backgroundColor?: string;
+  alignment?: 'left' | 'center' | 'right';
+}
+
+export interface CtaBannerProps {
+  title?: Translation;
+  subtitle?: Translation;
+  values?: CtaBannerValues;
+}
 
 interface Props {
   t: (obj: { zh: string; en: string }) => string;

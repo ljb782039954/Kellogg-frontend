@@ -1,6 +1,15 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import type { ImageTextProps } from '@/types';
+import type { Translation } from '@/types';
+
+export interface ImageTextProps {
+  title?: Translation;
+  content?: Translation;
+  image?: string;
+  imagePosition?: 'left' | 'right';
+  buttonText?: Translation;
+  buttonLink?: string;
+}
 
 interface Props {
   t: (obj: { zh: string; en: string }) => string;

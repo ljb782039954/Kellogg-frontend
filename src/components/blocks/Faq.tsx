@@ -4,7 +4,19 @@ import { ChevronDown, } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import MotionHeader from '../custom/motionHeader';
 import { AnimatePresence, motion } from 'framer-motion';
-import type { FAQProps } from '@/types';
+import type { Translation } from '@/types';
+
+export interface FAQItem {
+  id: number;
+  question: Translation;
+  answer: Translation;
+}
+
+export interface FAQProps {
+  title?: Translation;
+  subtitle?: Translation;
+  items?: FAQItem[];
+}
 
 interface Props {
   t: (obj: { zh: string; en: string }) => string;

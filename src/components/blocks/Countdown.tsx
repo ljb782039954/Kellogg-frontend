@@ -1,6 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import MotionHeaderDark from '../custom/motionHeaderDark';
-import type { CountdownProps } from '@/types';
+import type { Translation } from '@/types';
+
+export interface CountdownValues {
+  endTime?: string;
+  backgroundImage?: string;
+}
+
+export interface CountdownProps {
+  title?: Translation;
+  subtitle?: Translation;
+  values?: CountdownValues;
+}
 
 interface Props {
   t: (obj: { zh: string; en: string }) => string;

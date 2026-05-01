@@ -109,9 +109,21 @@ const SEOManager: React.FC<SEOManagerProps> = ({
     };
 
     // 注入 Canonical 标签 (极其重要，防止内容重复惩罚)
-    // 强制使用基础路径，去除可能导致内容重复的参数或 Hash
-    const currentUrl = `${window.location.origin}${pagePath}`;
-    updateLinkRel('canonical', currentUrl);
+    // 1. 优先使用环境变量中的站点域名，确保 www/非www、http/https 统一
+    const siteBaseUrl = (import.meta.env.VITE_SITE_URL || window.location.origin).replace(/\/$/, '');
+    
+    // 2. 规范化路径：确保以 / 开头，且非首页路径不以 / 结尾
+    let normalizedPath = pagePath.startsWith('/') ? pagePath : `/${pagePath}`;
+    if (normalizedPath.length > 1 && normalizedPath.endsWith('/')) {
+      normalizedPath = normalizedPath.slice(0, -1);
+    }
+    
+    // 3. 特殊处理首页
+    const finalCanonicalUrl = (pagePath === '' || pagePath === '/') 
+      ? `${siteBaseUrl}/` 
+      : `${siteBaseUrl}${normalizedPath}`;
+
+    updateLinkRel('canonical', finalCanonicalUrl);
 
     return () => {
       // 卸载时不需要特别清理，因为这些是全局 header

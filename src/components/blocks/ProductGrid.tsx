@@ -3,7 +3,11 @@ import ProductCard from '../custom/productCard';
 import { Link } from 'react-router-dom';
 import Pagination from '../custom/pagination';
 import { SlidersHorizontal } from 'lucide-react';
-import type { Product, ProductGridProps, Category, SortOption } from '@/types';
+import type { Product, Category, SortOption } from '@/types';
+
+export interface ProductGridProps {
+  itemsPerPage?: number;
+}
 
 interface Props {
   t: (obj: { zh: string; en: string }) => string;

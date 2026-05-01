@@ -1,5 +1,15 @@
 import MotionHeaderDark from "../custom/motionHeaderDark";
-import type { ImageBannerProps } from "@/types";
+import type { Translation } from "@/types";
+
+export interface ImageBannerProps {
+  image?: string;
+  title?: Translation;
+  subtitle?: Translation;
+  buttonText?: Translation;
+  linkUrl?: string;
+  height?: 'small' | 'medium' | 'large' | 'full';
+  overlay?: boolean;
+}
 interface Props {
   t: (obj: { zh: string; en: string }) => string;
   props: ImageBannerProps;
@@ -20,7 +30,7 @@ export default function ImageBanner({
     <section className={`relative ${heightClasses[height]} overflow-hidden`}>
       <img
         src={image}
-        alt=""
+        alt={t(title)}
         className="absolute inset-0 w-full h-full object-cover"
       />
       {overlay && <div className="absolute inset-0 bg-black/40" />}
