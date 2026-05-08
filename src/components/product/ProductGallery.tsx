@@ -1,6 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '@/lib/api';
-// import { OptimizedImage } from '../ui/OptimizedImage';
+import OptimizedImage from '../ui/OptimizedImage';
+
+const MotionOptimizedImage = motion(OptimizedImage);
 
 interface ProductGalleryProps {
   gallery: string[];
@@ -24,16 +26,21 @@ export default function ProductGallery({
       {/* Main Image */}
       <div className="aspect-[4/5] rounded-3xl overflow-hidden bg-gray-50 border border-gray-100 relative">
         <AnimatePresence mode="wait">
-          <motion.img
+          <MotionOptimizedImage
             key={variantPreviewImage || gallery[activeImageIndex]}
-            src={api.getOptimizedImageUrl(variantPreviewImage || gallery[activeImageIndex], 1200)}
-            srcSet={`${api.getOptimizedImageUrl(variantPreviewImage || gallery[activeImageIndex], 2000)} 2x`}
+            src={variantPreviewImage || gallery[activeImageIndex]}
             alt={productName}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
             className="w-full h-full object-cover"
+            responsive={{
+              sm: 640,
+              md: 800,
+              lg: 1200
+            }}
+            priority={true}
           />
         </AnimatePresence>
 
@@ -53,7 +60,12 @@ export default function ProductGallery({
             className={`relative w-24 aspect-square rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all ${activeImageIndex === idx ? 'border-gray-900' : 'border-transparent hover:border-gray-200'
               }`}
           >
-            <img src={img} alt={productName} className="w-full h-full object-cover" />
+            <OptimizedImage 
+              src={img} 
+              alt={`${productName} thumbnail ${idx}`} 
+              className="w-full h-full object-cover" 
+              width={200}
+            />
           </button>
         ))}
       </div>

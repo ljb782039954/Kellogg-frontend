@@ -2,6 +2,7 @@ import MotionHeader from "../custom/motionHeader";
 import type { Translation } from '@/types';
 
 export interface Partner {
+  id?: string;
   logo: string;
   name: string;
   color?: string;
@@ -32,7 +33,7 @@ export default function PartnerLogos({ t, props }: Props) {
         <div className="flex justify-center items-center gap-8 px-8 flex-wrap">
           {items.map((partner, i) => (
             <div
-              key={i}
+              key={partner.id || i}
               className="w-32 h-16 bg-white rounded-lg flex items-center justify-center shadow-sm hover:shadow-md transition-shadow grayscale hover:grayscale-0 cursor-pointer"
             >
               {partner.logo ? (

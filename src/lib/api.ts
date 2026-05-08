@@ -11,7 +11,7 @@ import type {
   // CategoryInput,
 } from '../types';
 
-const API_BASE = import.meta.env.VITE_IS_LOCAL_DEV === "true" ? import.meta.env.VITE_API_BASE_URL_LOCAL : import.meta.env.VITE_API_BASE_URL;
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_BASE_URL_LOCAL || '').replace(/\/$/, '');
 const ENABLE_CACHE = import.meta.env.VITE_ENABLE_API_CACHE === 'true';
 const CACHE_DURATION = 15 * 60 * 1000; // 15 mins
 
@@ -222,21 +222,58 @@ export const api = {
     }),
 
   /**
-   * 处理媒体资源 URL (用于本地开发环境下域名重写)
+   * 解析媒体 URL (统一指向 R2 资源域名)
    */
   resolveMediaUrl: (url: string | null | undefined): string => {
     if (!url) return '/placeholder.jpg';
-    if (url.startsWith('https://assets.kelloggfashion.com/')) {
-      return url.replace('https://assets.kelloggfashion.com', API_BASE);
-    }
-    return url;
+    if (url.startsWith('http')) return url;
+    
+    const assetsBase = import.meta.env.VITE_API_ASSETS || 'https://assets.kelloggfashion.com';
+    const cleanPath = url.startsWith('/') ? url.slice(1) : url;
+    
+    return `${assetsBase}/${cleanPath}`;
   },
 
   /**
-   * 获取优化后的图片 URL (目前因 Cloudflare 订阅限制，回退为返回原图)
+   * 获取优化后的图片 URL (利用 Cloudflare 官方 Transformations)
    */
-  getOptimizedImageUrl: (url: string | null | undefined, _width: number, _quality = 80): string => {
-    return api.resolveMediaUrl(url);
+  getOptimizedImageUrl: (url: string | null | undefined, width: number): string => {
+    if (!url) return '/placeholder.jpg';
+    
+    // 如果是外部 URL，不走优化逻辑
+    if (url.startsWith('http') && !url.includes('kelloggfashion.com')) {
+      return url;
+    }
+
+    // 处理本地开发环境
+    if (import.meta.env.VITE_IS_LOCAL_DEV === "true") {
+      return api.resolveMediaUrl(url);
+    }
+
+    // 1. 去掉 URL 中的查询参数
+    const cleanUrl = url.split('?')[0];
+    
+    // 2. 提取路径部分
+    let path = cleanUrl;
+    if (cleanUrl.startsWith('http')) {
+      try {
+        path = new URL(cleanUrl).pathname;
+      } catch (e) {}
+    }
+
+    // 3. 提取文件名并去除 uploads/ 前缀
+    const filename = path
+      .replace(/^\//, '')
+      .replace(/^uploads\//, '');
+
+    if (!filename) return api.resolveMediaUrl(url);
+
+    // 4. 核心逻辑：直接使用资源域名下的 /cdn-cgi/image 接口
+    // 这样不经过 Worker，速度最快，且避开了 .workers.dev 域名的限制
+    const assetsBase = import.meta.env.VITE_API_ASSETS || 'https://assets.kelloggfashion.com';
+    const quality = width <= 768 ? 75 : 85;
+
+    return `${assetsBase}/cdn-cgi/image/width=${width},quality=${quality},format=auto/uploads/${filename}`;
   },
 
   submitInquiry: (data: any) => request('/api/inquiries/submit', {

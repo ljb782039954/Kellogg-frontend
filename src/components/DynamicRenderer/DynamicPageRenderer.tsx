@@ -27,7 +27,7 @@ export function DynamicPageRenderer({ language, schema }: DynamicPageRendererPro
   return (
     <div className="dynamic-page">
       {enabledBlocks.map((block, index) => (
-        <Suspense key={block.id} fallback={<BlockSkeleton type={block.type} />}>
+        <Suspense key={block.id || `block-${index}`} fallback={<BlockSkeleton type={block.type} />}>
           <DynamicBlock language={language} block={block} isFirst={index === 0} />
         </Suspense>
       ))}

@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import type { Product } from '@/types';
 import { useCurrency } from '@/context/CurrencyContext';
 import type { BulkPrice } from '../../types/products';
+import OptimizedImage from '../ui/OptimizedImage';
 interface Props {
     product: Product;
     index?: number;
@@ -26,10 +27,15 @@ export default function ProductCard({
             {/* Image */}
             <div className="aspect-[3/4] overflow-hidden relative bg-gray-50">
                 {product.image ? (
-                    <img
+                    <OptimizedImage
                         src={product.image}
                         alt={t(product.name)}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        responsive={{
+                            sm: 320,
+                            md: 400,
+                            lg: 400
+                        }}
                     />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-300">

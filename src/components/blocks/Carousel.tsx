@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Translation, NavLink } from '@/types';
+import OptimizedImage from '../ui/OptimizedImage';
 
 export interface CarouselValues {
   id: number;
@@ -97,10 +98,12 @@ export default function Carousel({ t, props }: Props) {
         >
           {/* Background Image */}
           <div className="absolute inset-0">
-            <img
+            <OptimizedImage
               src={slide.image}
               alt={t(slide.title)}
               className="w-full h-full object-cover"
+              priority={currentIndex === 0}
+              sizes="100vw"
             />
             {/* Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />

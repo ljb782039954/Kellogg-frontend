@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import type { Translation } from '@/types';
+import OptimizedImage from '../ui/OptimizedImage';
 
 export interface ImageTextProps {
   title?: Translation;
@@ -58,10 +59,15 @@ export default function ImageText({
           {/* 图片 */}
           <div className="flex-1">
             <div className="aspect-[4/3] rounded-lg overflow-hidden">
-              <img
+              <OptimizedImage
                 src={image}
-                alt=""
+                alt={t(title)}
                 className="w-full h-full object-cover"
+                responsive={{
+                  sm: 640,
+                  md: 800,
+                  lg: 1024
+                }}
               />
             </div>
           </div>
@@ -74,7 +80,7 @@ export default function ImageText({
             {parts.length > 1 ? (
                   <ul className="space-y-1.5 mt-1">
                     {parts.map((part, i) => (
-                      <li key={i} className="flex items-start gap-2 text-gray-600 text-sm leading-relaxed">
+                      <li key={t(title)+'-imagetext-'+i} className="flex items-start gap-2 text-gray-600 text-sm leading-relaxed">
                         {i != 0 && <span className="text-gray-900 font-black text-lg -mt-1">·</span>}
                         <span>{part}</span>
                       </li>

@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import MotionHeader from '../custom/motionHeader';
 import type { Translation } from '@/types';
+import OptimizedImage from '../ui/OptimizedImage';
 
 export interface GalleryValues {
   src: string;
@@ -65,10 +66,15 @@ export default function Gallery({ t, props }: Props) {
               className="group relative aspect-square rounded-lg overflow-hidden cursor-pointer"
               onClick={() => setSelectedImage(i)}
             >
-              <img
+              <OptimizedImage
                 src={img.src}
-                alt=""
+                alt={t(img.caption)}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                responsive={{
+                  sm: 320,
+                  md: 400,
+                  lg: 500
+                }}
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity text-white text-center">
@@ -101,10 +107,11 @@ export default function Gallery({ t, props }: Props) {
             >
               <LucideIcons.ChevronLeft className="w-12 h-12" />
             </button>
-            <img
+            <OptimizedImage
               src={items[selectedImage].src}
-              alt=""
+              alt={t(items[selectedImage].caption)}
               className="max-w-4xl max-h-[80vh] object-contain"
+              width={1200}
               onClick={(e) => e.stopPropagation()}
             />
             <button

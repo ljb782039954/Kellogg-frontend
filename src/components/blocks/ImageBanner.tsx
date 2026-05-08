@@ -1,5 +1,6 @@
 import MotionHeaderDark from "../custom/motionHeaderDark";
 import type { Translation } from "@/types";
+import OptimizedImage from '../ui/OptimizedImage';
 
 export interface ImageBannerProps {
   image?: string;
@@ -28,10 +29,11 @@ export default function ImageBanner({
 
   return (
     <section className={`relative ${heightClasses[height]} overflow-hidden`}>
-      <img
+      <OptimizedImage
         src={image}
         alt={t(title)}
         className="absolute inset-0 w-full h-full object-cover"
+        sizes="100vw"
       />
       {overlay && <div className="absolute inset-0 bg-black/40" />}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-white">

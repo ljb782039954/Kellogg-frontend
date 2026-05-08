@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Maximize2, X } from 'lucide-react';
 import type { Translation } from "@/types";
+import OptimizedImage from '../ui/OptimizedImage';
 
 export interface ImageFullProps {
     image?: string;
@@ -55,10 +56,15 @@ export default function ImageFull({
           className={`relative ${heightClasses[height]} overflow-hidden group cursor-zoom-in transition-all duration-500 rounded-lg shadow-sm`}
           onClick={() => setIsFullscreen(true)}
         >
-          <img
+          <OptimizedImage
             src={image}
             alt={t(alt || { zh: '', en: '' })}
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            responsive={{
+              sm: 640,
+              md: 1024,
+              lg: 1920
+            }}
           />
           
           {/* Overlay Mask */}
@@ -97,10 +103,12 @@ export default function ImageFull({
             <X className="w-8 h-8" />
           </button>
           
-          <img
+          <OptimizedImage
             src={image}
             alt={t(alt || { zh: '', en: '' })}
             className="max-w-full max-h-full object-contain shadow-2xl animate-in zoom-in-95 duration-300"
+            width={1920}
+            quality={90}
             onClick={(e) => e.stopPropagation()}
           />
         </div>
