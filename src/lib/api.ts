@@ -7,6 +7,7 @@
 import type {
   Product,
   Category,
+  CustomPage
   // ProductInput,
   // CategoryInput,
 } from '../types';
