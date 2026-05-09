@@ -46,6 +46,13 @@ async function generateSitemap() {
       { path: '/products', priority: '0.9', changefreq: 'weekly' },
       { path: '/about', priority: '0.7', changefreq: 'monthly' },
       { path: '/faq', priority: '0.6', changefreq: 'monthly' },
+      { path: '/fabrics', priority: '0.7', changefreq: 'weekly' },
+      { path: '/service', priority: '0.7', changefreq: 'weekly' },
+      { path: '/service-sample', priority: '0.7', changefreq: 'weekly' },
+      // { path: '/service-labels', priority: '0.9', changefreq: 'weekly' },
+      // { path: '/blog-500gsm-hoodie-guide', priority: '0.9', changefreq: 'weekly' },
+      { path: '/technology', priority: '0.7', changefreq: 'weekly' },
+      { path: '/service-labels', priority: '0.7', changefreq: 'weekly' },
       // SEO GEO 战略着陆页矩阵
       { path: '/usa-heavyweight-hoodie-manufacturer', priority: '0.9', changefreq: 'weekly' },
       { path: '/uk-streetwear-clothing-manufacturer', priority: '0.9', changefreq: 'weekly' },

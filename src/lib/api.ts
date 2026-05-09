@@ -189,6 +189,8 @@ export const api = {
       throw err;
     }),
 
+  getPageById: (id: string) => request<CustomPage>(`/api/config/pages/${id}`),
+
   // setConfig: <T = unknown>(key: string, value: T) =>
   //   request<{ success: boolean }>('/api/config', {
   //     method: 'POST',
