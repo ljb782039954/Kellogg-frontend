@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
 import { ContentProvider, useContent } from './context/ContentContext';
 import { CurrencyProvider } from './context/CurrencyContext';
@@ -8,6 +8,7 @@ import { Loader2 } from 'lucide-react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import TawkChat from './components/tawkChat';
+import InquirySection from './components/blocksFixed/InquirySection';
 
 // Pages
 import DynamicPage from './pages/DynamicPage';
@@ -16,6 +17,11 @@ import Inquiry from './pages/Inquiry';
 
 function AppRoutes() {
   const { content } = useContent();
+  const location = useLocation();
+
+  // Find the inquiry page path to exclude InquirySection
+  const inquiryPage = content?.pages.find(p => p.id === 'system-inquiry');
+  const isInquiryPage = location.pathname === inquiryPage?.path;
 
   return (
     <>
@@ -45,6 +51,7 @@ function AppRoutes() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
+      {!isInquiryPage && <InquirySection />}
       <Footer theme="light" />
     </>
   );

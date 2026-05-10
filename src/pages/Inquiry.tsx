@@ -1,42 +1,23 @@
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Phone, MapPin, Send, Loader2, CheckCircle2, Globe, Building2, Package } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useContent } from '../context/ContentContext';
-import { api } from '@/lib/api';
+import { useInquiry } from '../hooks/useInquiry';
 import SEOManager from '../components/seo/SEOManager';
 
 export default function Inquiry() {
   const { language } = useLanguage();
   const { content } = useContent();
-  const [inquiryConfig, setInquiryConfig] = useState<any>(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    country: '',
-    company: '',
-    product_type: '',
-    quantity: '',
-    message: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-
-  useEffect(() => {
-    // 自动获取配置，如果失败使用默认
-    api.getConfig('inquiry_config').then(data => {
-      if (data) setInquiryConfig(data);
-    }).catch(() => {});
-  }, []);
-
-  const config = inquiryConfig || {
-    title: { zh: '联系我们要样品', en: 'Contact Us For Samples' },
-    description: { 
-      zh: '如果您有任何关于产品的咨询，请填写下方表格，我们的团队会尽快与您联系。', 
-      en: 'If you have any inquiries about our products, please fill out the form below and our team will get back to you as soon as possible.' 
-    }
-  };
+  const {
+    formData,
+    setFormData,
+    isSubmitting,
+    isSuccess,
+    setIsSuccess,
+    handleSubmit,
+    config,
+    t
+  } = useInquiry();
 
   const contactInfo = content?.companyInfo?.contact || {
     address: { zh: '中国 广州', en: 'Guangzhou, China' },
@@ -44,49 +25,10 @@ export default function Inquiry() {
     email: 'contact@kellogg.com'
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      await api.submitInquiry(formData);
-      setIsSuccess(true);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        country: '',
-        company: '',
-        product_type: '',
-        quantity: '',
-        message: ''
-      });
-    } catch (err) {
-      alert(language === 'zh' ? '提交失败，请重试' : 'Submission failed, please try again');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const t = {
-    form: {
-      name: language === 'zh' ? '姓名' : 'First Name',
-      email: language === 'zh' ? '邮箱' : 'Email',
-      phone: language === 'zh' ? '电话' : 'Phone Number',
-      country: language === 'zh' ? '国家/地区' : 'Country/Region',
-      company: language === 'zh' ? '公司名称' : 'Company Name',
-      productType: language === 'zh' ? '产品类型' : 'Product Type',
-      quantity: language === 'zh' ? '需求数量' : 'Order Quantity',
-      message: language === 'zh' ? '消息详情' : 'Message details',
-      submit: language === 'zh' ? '提交询盘' : 'Submit Inquiry',
-      success: language === 'zh' ? '提交成功！' : 'Success!',
-      successMsg: language === 'zh' ? '感谢您的咨询，我们会尽快与您联系。' : 'Thank you for your inquiry, we will contact you soon.',
-      back: language === 'zh' ? '返回' : 'Go Back'
-    },
-    sidebar: {
-      location: language === 'zh' ? '办公地址' : 'Our Office',
-      contact: language === 'zh' ? '联系方式' : 'Contact Details',
-      follow: language === 'zh' ? '关注我们' : 'Follow Us'
-    }
+  const tSidebar = {
+    location: language === 'zh' ? '办公地址' : 'Our Office',
+    contact: language === 'zh' ? '联系方式' : 'Contact Details',
+    follow: language === 'zh' ? '关注我们' : 'Follow Us'
   };
 
   return (
@@ -122,7 +64,7 @@ export default function Inquiry() {
                       <MapPin className="w-6 h-6 text-gray-900" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{t.sidebar.location}</h4>
+                      <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{tSidebar.location}</h4>
                       <p className="text-gray-900 font-medium">
                         {typeof contactInfo.address === 'string' 
                           ? contactInfo.address 
@@ -136,7 +78,7 @@ export default function Inquiry() {
                       <Phone className="w-6 h-6 text-gray-900" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{t.sidebar.contact}</h4>
+                      <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{tSidebar.contact}</h4>
                       <p className="text-gray-900 font-medium">{contactInfo.phone}</p>
                       <p className="text-gray-500">{contactInfo.email}</p>
                     </div>
@@ -144,7 +86,7 @@ export default function Inquiry() {
                 </div>
 
                 <div className="pt-8 border-t border-gray-100">
-                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">{t.sidebar.follow}</h4>
+                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">{tSidebar.follow}</h4>
                   <div className="flex gap-4">
                     {['Facebook', 'Instagram', 'LinkedIn', 'Twitter'].map(social => (
                       <button key={social} className="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-900 hover:text-white transition-all">
