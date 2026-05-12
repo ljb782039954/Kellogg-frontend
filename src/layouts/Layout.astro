@@ -4,6 +4,8 @@ import { getSiteData } from "../lib/site";
 import Header from "../components/Header";
 import Footer from "../components/Footer.astro";
 import TawkChat from "../components/TawkChat.astro";
+import { createTranslate } from "../lib/i18n";
+import type { Translation, Language } from "../types";
 
 interface Props {
 	title?: string | Translation;
