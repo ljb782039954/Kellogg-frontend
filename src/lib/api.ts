@@ -12,7 +12,6 @@ import type {
 
 const API_BASE = (
   import.meta.env.PUBLIC_API_BASE_URL || 
-  import.meta.env.VITE_API_BASE_URL || 
   ''
 ).replace(/\/$/, '');
 
@@ -123,7 +122,7 @@ export const api = {
     if (!url) return '/placeholder.jpg';
     if (url.startsWith('http')) return url;
     
-    const assetsBase = import.meta.env.PUBLIC_API_ASSETS || 'https://assets.kelloggfashion.com';
+    const assetsBase = import.meta.env.PUBLIC_API_ASSETS;
     const cleanPath = url.startsWith('/') ? url.slice(1) : url;
     
     return `${assetsBase}/${cleanPath}`;
@@ -153,7 +152,7 @@ export const api = {
 
     if (!filename) return api.resolveMediaUrl(url);
 
-    const assetsBase = import.meta.env.PUBLIC_API_ASSETS || 'https://assets.kelloggfashion.com';
+    const assetsBase = import.meta.env.PUBLIC_API_ASSETS;
     const quality = width <= 768 ? 75 : 85;
 
     return `${assetsBase}/cdn-cgi/image/width=${width},quality=${quality},format=auto/uploads/${filename}`;
