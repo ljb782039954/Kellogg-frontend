@@ -1,46 +1,46 @@
 ---
+export const prerender = true;
+
 import Layout from "../layouts/Layout.astro";
 import { api } from "../lib/api";
 import { getSiteData } from "../lib/site";
 import DynamicRenderer from "../components/DynamicRenderer.astro";
 import InquirySection from "../components/blocks/InquirySection";
-// import type { Language } from "../types";
 
-// SSR 模式下不需要 getStaticPaths
-
-const { slug } = Astro.params;
-const path = slug === undefined ? "/" : `/${slug}`;
-
-// 1. 获取站点全局数据和页面列表
-const siteData = await getSiteData(Astro);
-const { pages, lang } = siteData;
-
-// 2. 找到匹配的页面
-const page = pages.find((p) => {
-  const normalizedPath = p.path.endsWith("/") ? p.path : p.path + "/";
-  const normalizedSearch = path.endsWith("/") ? path : path + "/";
-  return normalizedPath === normalizedSearch;
-});
-
-if (!page) {
-  console.error(`[Astro] Page not found for path: ${path}`);
-  // 如果是根目录都找不到，说明 API 数据有问题
-  if (path === "/") {
-    return new Response(
-      "No homepage found in CMS data. Please check your API/KV configuration.",
-      { status: 404 },
-    );
-  }
-  return Astro.redirect("/");
+export async function getStaticPaths() {
+  // 在构建时获取所有站点数据
+  const { pages } = await getSiteData(); 
+  
+  return pages.map(page => {
+    // 处理路径，去掉前缀斜杠并处理空路径（首页）
+    const slug = page.path === '/' ? undefined : page.path.replace(/^\//, '');
+    return {
+      params: { slug },
+      props: { pageId: page.id } // 传给页面，避免重复查找
+    };
+  });
 }
 
-// 3. 获取页面的详细数据 (包含积木块)
-const fullPage = await api.getPageById(page.id);
+const { slug } = Astro.params;
+const { pageId } = Astro.props;
+const path = slug === undefined ? "/" : `/${slug}`;
+
+// 1. 获取站点全局数据
+const siteData = await getSiteData(Astro);
+const { lang } = siteData;
+
+// 2. 获取页面的详细数据 (包含积木块)
+const fullPage = await api.getPageById(pageId);
+
+if (!fullPage) {
+  console.error(`[Astro] Page not found for ID: ${pageId}`);
+  return Astro.redirect("/");
+}
 ---
 
 <Layout title={fullPage.title} lang={lang} seo={fullPage.seo}>
   {
-    page.id === "system-inquiry" ? (
+    pageId === "system-inquiry" ? (
       <div class="py-12">
         <InquirySection lang={lang} client:load />
       </div>
