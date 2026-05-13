@@ -17,6 +17,13 @@ import FAQ from "./blocks/FAQ";
 import ImageText from "./blocks/ImageText.astro";
 import CtaBanner from "./blocks/CtaBanner.astro";
 import FeatureList from "./blocks/FeatureList.astro";
+import NewArrivals from "./blocks/NewArrivals.astro";
+import Countdown from "./blocks/Countdown";
+import Gallery from "./blocks/Gallery";
+import ImageBannerTag from "./blocks/ImageBannerTag.astro";
+import ImageFull from "./blocks/ImageFull";
+import PartnerLogos from "./blocks/PartnerLogos.astro";
+import VideoSection from "./blocks/VideoSection.astro";
 
 interface Props {
   schema: CustomPage;
@@ -67,8 +74,6 @@ const blocksWithData = await Promise.all(
 
 <div class="dynamic-page">
   {blocksWithData.map((block, index) => {
-    const isFirst = index === 0;
-    
     // 根据类型渲染组件
     switch (block.type) {
       case 'imageBanner':
@@ -87,8 +92,10 @@ const blocksWithData = await Promise.all(
         return <ProductGrid {...block.content} {...block.data} lang={lang} client:load />;
 
       case 'featuredProducts':
-      case 'newArrivals':
         return <FeaturedProducts {...block.content} {...block.data} lang={lang} />;
+
+      case 'newArrivals':
+        return <NewArrivals {...block.content} {...block.data} lang={lang} />;
       
       case 'inquiry':
         return <InquirySection lang={lang} client:load />;
@@ -113,6 +120,24 @@ const blocksWithData = await Promise.all(
       
       case 'featureList':
         return <FeatureList {...block.content} lang={lang} />;
+
+      case 'countdown':
+        return <Countdown {...block.content} lang={lang} client:load />;
+
+      case 'gallery':
+        return <Gallery {...block.content} lang={lang} client:load />;
+
+      case 'imageBannerTag':
+        return <ImageBannerTag {...block.content} lang={lang} />;
+
+      case 'imageFull':
+        return <ImageFull {...block.content} lang={lang} client:load />;
+
+      case 'partnerLogos':
+        return <PartnerLogos {...block.content} lang={lang} />;
+
+      case 'videoSection':
+        return <VideoSection {...block.content} lang={lang} />;
       
       default:
         return (

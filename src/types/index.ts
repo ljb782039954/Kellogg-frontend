@@ -5,6 +5,7 @@ export * from "./baseEditor";
 
 import type { CompanyInfo, HeaderContent, FooterContent } from "./baseEditor";
 import type { CustomPage } from "./blocks";
+import type { Language } from "./common";
 
 // ============================================
 // 核心聚合与 API 响应类型
@@ -15,6 +16,7 @@ export interface SiteContent {
   header: HeaderContent;
   footer: FooterContent;
   pages: CustomPage[];
+  lang: Language;
 }
 
 

@@ -24,14 +24,14 @@ export default function Statistics({ title, subtitle, items = [], lang }: Statis
   if (items.length === 0) return null;
 
   return (
-    <section className="py-20 bg-gray-900 text-white">
+    <section className="py-12 bg-gray-900 text-white">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 max-w-2xl mx-auto">
-          {title && <h2 className="text-3xl md:text-5xl font-bold mb-4">{t(title)}</h2>}
-          {subtitle && <p className="text-gray-400 text-lg">{t(subtitle)}</p>}
+        <div className="text-center mb-12 max-w-2xl mx-auto">
+          {title && <h2 className="text-2xl md:text-4xl font-bold mb-4">{t(title)}</h2>}
+          {subtitle && <p className="text-gray-400 text-md md:text-lg">{t(subtitle)}</p>}
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+        <div className="flex flex-row justify-between max-w-6xl mx-auto gap-2 md:gap-4">
           {items.map((item, index) => (
             <motion.div
               key={index}
@@ -41,10 +41,10 @@ export default function Statistics({ title, subtitle, items = [], lang }: Statis
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="text-center"
             >
-              <div className="text-4xl md:text-6xl font-bold mb-3 text-white">
+              <div className="text-4xl md:text-5xl lg:text-6xl font-bold mb-2 text-white">
                 <AnimatedNumber value={item.value} />
               </div>
-              <div className="text-sm md:text-lg text-gray-400 font-medium">
+              <div className="text-sm md:text-base text-gray-400">
                 {t(item.label)}
               </div>
             </motion.div>

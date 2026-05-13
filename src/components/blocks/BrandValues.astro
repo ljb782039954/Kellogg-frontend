@@ -23,22 +23,20 @@ const t = createTranslate(lang);
 ---
 
 {items.length > 0 && (
-  <section class="py-16 w-full">
+  <section class="py-12 w-full">
     <div class="container mx-auto px-4">
       {title && <SectionHeader lang={lang} title={title} subtitle={subtitle} theme="light" />}
       
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+      <div class="flex flex-row justify-between max-w-6xl mx-auto gap-2 md:gap-4">
         {items.map((item) => {
           const Icon = (LucideIcons as any)[item.icon] || LucideIcons.Star;
           return (
             <div class="text-center group">
-              <div class="w-16 h-16 mx-auto bg-gray-50 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-all group-hover:scale-110">
-                <Icon class="w-8 h-8 text-gray-800 group-hover:text-primary transition-colors" />
+              <div class="w-12 h-12 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
+                <Icon class="w-6 h-6 text-primary" />
               </div>
-              <h4 class="font-bold mb-2 text-gray-900">{t(item.title)}</h4>
-              <p class="text-sm text-gray-500 max-w-[200px] mx-auto leading-relaxed">
-                {t(item.description)}
-              </p>
+              <h4 class="font-medium mb-1">{t(item.title)}</h4>
+              <p class="text-sm text-gray-500 max-w-xs line-clamp-2">{t(item.description)}</p>
             </div>
           );
         })}

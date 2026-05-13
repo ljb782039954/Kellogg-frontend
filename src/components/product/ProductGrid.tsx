@@ -63,7 +63,7 @@ export default function ProductGrid({
   );
 
   return (
-    <section className="pt-12 pb-24 w-full">
+    <section className="pt-20 w-full">
       <div className="container mx-auto px-4">
         {/* Filters */}
         <div className="w-full border-b border-gray-200">
@@ -130,7 +130,7 @@ export default function ProductGrid({
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
                 {paginatedProducts.map((product, index) => (
                   <a
                     key={product.id}

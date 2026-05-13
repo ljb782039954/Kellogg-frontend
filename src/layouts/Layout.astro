@@ -12,15 +12,15 @@ interface Props {
 	description?: string | Translation;
 	lang?: Language;
   seo?: {
-    title?: Translation;
-    description?: Translation;
-    keywords?: Translation;
+    title?: string | Translation;
+    description?: string | Translation;
+    keywords?: string | Translation;
   }
 }
 
 const { lang = "en", seo } = Astro.props;
-const siteData = await getSiteData();
-const { companyInfo, header, footer } = siteData;
+const siteData = await getSiteData(Astro);
+const { companyInfo, header, footer, lang: detectedLang } = siteData;
 
 const t = createTranslate(lang);
 

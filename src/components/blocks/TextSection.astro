@@ -5,49 +5,64 @@ import { createTranslate } from "../../lib/i18n";
 interface Props {
   title?: Translation;
   content?: Translation;
-  alignment?: 'left' | 'center' | 'right';
-  paddingY?: 'small' | 'medium' | 'large';
+  alignment?: "left" | "center" | "right";
+  paddingY?: "small" | "medium" | "large";
   backgroundColor?: string;
   lang: Language;
 }
 
-const { title, content, alignment = 'center', backgroundColor, lang } = Astro.props;
+const {
+  title,
+  content,
+  alignment = "center",
+  backgroundColor,
+  lang,
+} = Astro.props;
 const t = createTranslate(lang);
 
 const alignClasses = {
-  left: 'text-left',
-  center: 'text-center',
-  right: 'text-right'
+  left: "text-left",
+  center: "text-center",
+  right: "text-right",
 };
 
 const paddingClasses = {
-  small: 'py-8',
-  medium: 'py-16',
-  large: 'py-24'
+  small: "py-8",
+  medium: "py-16",
+  large: "py-24",
 };
 ---
 
-<section 
+<section
   class:list={[
-    "relative", 
-    alignClasses[alignment], 
-    paddingClasses[Astro.props.paddingY || 'medium']
+    "py-12",
+    backgroundColor ? `bg-[${backgroundColor}]` : "bg-gray-50",
+    alignment === "center"
+      ? "text-center"
+      : alignment === "right"
+        ? "text-right"
+        : "text-left",
   ]}
-  style={backgroundColor ? `background-color: ${backgroundColor}` : undefined}
 >
   <div class="container mx-auto px-4">
-    {title && (
-      <h2 class="text-3xl md:text-5xl font-bold text-gray-900 mb-6">
-        {t(title)}
-      </h2>
-    )}
-    {content && (
-      <p class:list={[
-        "text-gray-600 max-w-3xl text-lg md:text-xl leading-relaxed",
-        alignment === 'center' ? 'mx-auto' : ''
-      ]}>
-        {t(content)}
-      </p>
-    )}
+    {
+      title && (
+        <h1 class="text-2xl md:text-4xl font-bold text-gray-800 mb-4">
+          {t(title)}
+        </h1>
+      )
+    }
+    {
+      content && (
+        <p
+          class:list={[
+            "text-gray-500 max-w-2xl text-md md:text-lg mx-auto leading-relaxed",
+            // alignment === 'center' ? 'mx-auto' : ''
+          ]}
+        >
+          {t(content)}
+        </p>
+      )
+    }
   </div>
 </section>

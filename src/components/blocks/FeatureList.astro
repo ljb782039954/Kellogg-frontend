@@ -22,22 +22,20 @@ const t = createTranslate(lang);
 ---
 
 {items.length > 0 && (
-  <section class="py-20 w-full bg-white">
+  <section class="py-12 w-full">
     <div class="container mx-auto px-4">
       {title && <SectionHeader lang={lang} title={title} subtitle={subtitle} theme="light" />}
       
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 max-w-6xl mx-auto">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
         {items.map((item) => {
           const Icon = (LucideIcons as any)[item.icon] || LucideIcons.Star;
           return (
-            <div class="bg-gray-50/50 rounded-3xl p-8 hover:bg-white hover:shadow-xl transition-all duration-500 border border-transparent hover:border-gray-100 group">
-              <div class="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary/10 transition-colors">
-                <Icon class="w-7 h-7 text-gray-800 group-hover:text-primary transition-colors" />
+            <div class="bg-gray-50 rounded-xl p-6 hover:bg-primary/5 hover:shadow-md transition-all group">
+              <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                <Icon class="w-6 h-6 text-primary" />
               </div>
-              <h4 class="font-bold mb-3 text-gray-900 text-lg">{t(item.title)}</h4>
-              <p class="text-sm text-gray-500 leading-relaxed">
-                {t(item.description)}
-              </p>
+              <h4 class="font-semibold mb-2">{t(item.title)}</h4>
+              <p class="text-sm text-gray-500">{t(item.description)}</p>
             </div>
           );
         })}

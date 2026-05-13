@@ -31,11 +31,11 @@ export default function FAQ({ title, subtitle, items = [], lang }: FAQProps) {
   if (!items || items.length === 0) return null;
 
   return (
-    <section className="py-20 w-full bg-white">
+    <section className="py-8">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 max-w-2xl mx-auto">
-          {title && <h2 className="text-3xl md:text-5xl font-bold mb-4 text-gray-900">{t(title)}</h2>}
-          {subtitle && <p className="text-gray-500 text-lg">{t(subtitle)}</p>}
+        <div className="text-center mb-12 max-w-2xl mx-auto">
+          {title && <h2 className="text-2xl md:text-4xl font-bold mb-4 text-gray-900">{t(title)}</h2>}
+          {subtitle && <p className="text-gray-500 text-md md:text-lg">{t(subtitle)}</p>}
         </div>
 
         <div className="max-w-3xl mx-auto space-y-4">
@@ -44,20 +44,18 @@ export default function FAQ({ title, subtitle, items = [], lang }: FAQProps) {
               key={item.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-gray-50/50 border border-gray-100 rounded-2xl overflow-hidden hover:bg-gray-50 transition-colors"
+              className="bg-white border border-gray-100 rounded-xl overflow-hidden"
             >
               <button
                 onClick={() => setOpenIndex(openIndex === item.id ? null : item.id)}
-                className="w-full flex items-center justify-between p-6 text-left"
+                className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
               >
-                <span className="font-bold text-gray-800 pr-4">
+                <span className="font-medium text-gray-800 pr-4">
                   {t(item.question)}
                 </span>
-                <div className={`p-1 rounded-full transition-all ${openIndex === item.id ? 'bg-gray-900 text-white' : 'bg-white text-gray-400'}`}>
-                  <ChevronDown
-                    className={`w-5 h-5 transition-transform duration-300 ${openIndex === item.id ? 'rotate-180' : ''}`}
-                  />
-                </div>
+                <ChevronDown
+                  className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform ${openIndex === item.id ? 'rotate-180' : ''}`}
+                />
               </button>
 
               <AnimatePresence>
@@ -66,12 +64,14 @@ export default function FAQ({ title, subtitle, items = [], lang }: FAQProps) {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    transition={{ duration: 0.2 }}
                   >
-                    <div className="px-6 pb-6 pt-2">
-                      <p className="text-gray-600 leading-relaxed border-t border-gray-200 pt-6">
-                        {t(item.answer)}
-                      </p>
+                    <div className="px-6 pb-6">
+                      <div className="pt-2 border-t border-gray-100">
+                        <p className="text-gray-600 leading-relaxed pt-4">
+                          {t(item.answer)}
+                        </p>
+                      </div>
                     </div>
                   </motion.div>
                 )}
@@ -81,10 +81,10 @@ export default function FAQ({ title, subtitle, items = [], lang }: FAQProps) {
         </div>
 
         {hasMore && (
-          <div className="text-center mt-10">
+          <div className="text-center mt-6">
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="px-8 py-3 rounded-full border-2 border-gray-900 text-gray-900 font-bold hover:bg-gray-900 hover:text-white transition-all active:scale-95"
+              className="px-4 py-2 border border-gray-200 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors"
             >
               {isExpanded 
                 ? (lang === 'zh' ? '收起部分' : 'Show Less') 

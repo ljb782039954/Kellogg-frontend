@@ -17,6 +17,7 @@ export type BlockType =
   | 'faq'
   | 'textSection'
   | 'imageFull' 
+  | 'inquiry' 
   | 'imageBanner'
   | 'imageBannerTag'
   | 'videoSection'

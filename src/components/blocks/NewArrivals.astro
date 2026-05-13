@@ -1,7 +1,7 @@
 ---
 import type { Translation, Product, Language } from "../../types";
-import ProductCard from "../product/ProductCard.astro";
 import SectionHeader from "../SectionHeader.astro";
+import ProductCardNew from "../product/ProductCardNew.astro";
 
 interface Props {
   title?: Translation;
@@ -12,19 +12,16 @@ interface Props {
 }
 
 const { title, subtitle, maxItems, products = [], lang } = Astro.props;
-const displayedProducts = maxItems ? products.slice(0, maxItems) : products;
+const displayProducts = maxItems ? products.slice(0, maxItems) : products;
 ---
 
-{displayedProducts.length > 0 && (
-  <section class="py-8 w-full">
+{displayProducts.length > 0 && (
+  <section class="py-8">
     <div class="container mx-auto px-4">
       {title && <SectionHeader lang={lang} title={title} subtitle={subtitle} theme="light" />}
-      
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {displayedProducts.map((product, index) => (
-          <a href={`/product/${product.id}`} class="block h-full">
-            <ProductCard product={product} index={index} lang={lang} />
-          </a>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4 px-4 pb-4">
+        {displayProducts.map((product, index) => (
+          <ProductCardNew product={product} index={index} lang={lang} />
         ))}
       </div>
     </div>

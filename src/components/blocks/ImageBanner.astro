@@ -1,4 +1,4 @@
----
+<!-- ---
 import type { Translation, Language } from "../../types";
 import OptimizedImage from "../ui/OptimizedImage.astro";
 import SectionHeader from "../SectionHeader.astro";
@@ -29,10 +29,9 @@ const {
 const t = createTranslate(lang);
 
 const heightClasses = {
-  small: 'h-48 md:h-64',
-  medium: 'h-64 md:h-96',
-  large: 'h-96 md:h-[500px]',
-  full: 'h-screen'
+  small: 'h-48',
+  medium: 'h-64',
+  large: 'h-96'
 };
 ---
 
@@ -42,21 +41,20 @@ const heightClasses = {
     alt={title ? t(title) : "Banner"}
     class="absolute inset-0 w-full h-full object-cover"
     sizes="100vw"
-    priority={height === 'large' || height === 'full'}
   />
   
   {overlay && <div class="absolute inset-0 bg-black/40" />}
   
-  <div class="absolute inset-0 flex flex-col items-center justify-center text-white z-10 px-4">
-    {title && <SectionHeader lang={lang} title={title} subtitle={subtitle} theme="dark" class="mb-6" />}
+  <div class="absolute inset-0 flex flex-col items-center justify-center text-white z-10 px-4 text-center">
+    {title && <SectionHeader lang={lang} title={title} subtitle={subtitle} theme="dark" />}
     
     {buttonText && (
       <a
         href={linkUrl || "#"}
-        class="px-8 py-3 bg-white text-gray-900 rounded-full text-sm font-bold hover:bg-gray-100 transition-all hover:scale-105 active:scale-95 shadow-lg"
+        class="px-6 py-2 bg-white text-gray-900 rounded-full text-sm font-medium hover:bg-gray-100 transition-colors"
       >
         {t(buttonText)}
       </a>
     )}
   </div>
-</section>
+</section> -->
