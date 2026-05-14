@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Share2, Layers, Calendar, ChevronDown } from 'lucide-react';
-import type { Product, Language, BulkPrice } from '../../types';
-import { formatPrice } from '../../lib/currency';
+import { Star, Share2, Layers, Calendar } from 'lucide-react';
+import { useStore } from '@nanostores/react';
+import { $currency, $rates, formatPrice } from '../../lib/currency';
+import { t } from '../../utils/common';
 import OptimizedImage from '../ui/OptimizedImage';
+import type { Product, Language } from '../../types';
 
 interface Props {
   product: Product;
@@ -15,16 +17,24 @@ export default function ProductDetailView({ product, lang }: Props) {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColorIndex, setSelectedColorIndex] = useState<number | null>(null);
   const [variantPreviewImage, setVariantPreviewImage] = useState<string | null>(null);
+  
+  const [hasMounted, setHasMounted] = useState(false);
+  const currency = useStore($currency);
+  const rates = useStore($rates);
 
-  const t = (obj: any) => {
-    if (!obj) return '';
-    if (typeof obj === 'string') return obj;
-    return obj[lang] || obj['en'] || '';
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  const getDisplayPrice = (price: number | null | undefined) => {
+    return hasMounted 
+      ? formatPrice(price, currency, rates)
+      : formatPrice(price);
   };
 
   const handleShare = () => {
     const url = window.location.href;
-    const title = t(product.name);
+    const title = t(product.name, lang);
     if (navigator.share) {
       navigator.share({ title, url }).catch(() => copyToClipboard(url));
     } else {
@@ -56,7 +66,7 @@ export default function ProductDetailView({ product, lang }: Props) {
             >
               <OptimizedImage
                 src={variantPreviewImage || gallery[activeImageIndex]}
-                alt={t(product.name)}
+                alt={t(product.name, lang)}
                 className="w-full h-full object-cover"
                 priority={true}
               />
@@ -65,7 +75,7 @@ export default function ProductDetailView({ product, lang }: Props) {
 
           {product.tag && (
             <span className="absolute top-8 left-8 px-5 py-2 bg-gray-900 text-white text-xs font-bold rounded-full tracking-widest uppercase z-10 shadow-lg">
-              {t(product.tag)}
+              {t(product.tag, lang)}
             </span>
           )}
         </div>
@@ -93,7 +103,7 @@ export default function ProductDetailView({ product, lang }: Props) {
         <div>
           <div className="flex items-center gap-3 mb-6">
             <span className="text-xs font-bold text-amber-600 bg-amber-50 px-4 py-1.5 rounded-full uppercase tracking-wider">
-              {t(product.category)}
+              {t(product.category, lang)}
             </span>
             <div className="flex items-center gap-1.5 text-amber-400 bg-gray-50 px-3 py-1 rounded-full">
               <Star className="w-4 h-4 fill-current" />
@@ -103,7 +113,7 @@ export default function ProductDetailView({ product, lang }: Props) {
           
           <div className="flex justify-between items-start gap-4">
             <h1 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight">
-              {t(product.name)}
+              {t(product.name, lang)}
             </h1>
             <button
               onClick={handleShare}
@@ -111,6 +121,18 @@ export default function ProductDetailView({ product, lang }: Props) {
             >
               <Share2 className="w-6 h-6" />
             </button>
+          </div>
+
+          {/* Price Section */}
+          <div className="mt-8 flex items-baseline gap-4">
+            <span className="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter">
+              {getDisplayPrice(product.price)}
+            </span>
+            {product.originalPrice && (
+              <span className="text-xl md:text-2xl text-gray-300 line-through font-medium">
+                {getDisplayPrice(product.originalPrice)}
+              </span>
+            )}
           </div>
         </div>
 
@@ -129,7 +151,7 @@ export default function ProductDetailView({ product, lang }: Props) {
                   <p className="text-[10px] font-bold text-gray-400 uppercase mb-1">
                     {tier.maxQty ? `${tier.minQty}-${tier.maxQty} PCS` : `${tier.minQty}+ PCS`}
                   </p>
-                  <p className="text-base font-bold text-gray-900">{formatPrice(tier.price)}</p>
+                  <p className="text-base font-bold text-gray-900">{getDisplayPrice(tier.price)}</p>
                 </div>
               ))}
             </div>
@@ -143,7 +165,7 @@ export default function ProductDetailView({ product, lang }: Props) {
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold uppercase tracking-widest text-gray-400">{lang === 'zh' ? '颜色' : 'Color'}</span>
                 <span className="text-sm font-bold text-gray-900">
-                  {selectedColorIndex !== null ? t(product.colors[selectedColorIndex].name) : (lang === 'zh' ? '请选择' : 'Select')}
+                  {selectedColorIndex !== null ? t(product.colors[selectedColorIndex].name, lang) : (lang === 'zh' ? '请选择' : 'Select')}
                 </span>
               </div>
               <div className="flex flex-wrap gap-4">
@@ -162,7 +184,7 @@ export default function ProductDetailView({ product, lang }: Props) {
                       <img src={color.image} alt="" className="w-full h-full object-cover rounded-full" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-full text-[10px] font-bold uppercase">
-                        {t(color.name).slice(0, 2)}
+                        {t(color.name, lang).slice(0, 2)}
                       </div>
                     )}
                   </button>
@@ -202,7 +224,7 @@ export default function ProductDetailView({ product, lang }: Props) {
         {/* Extra Info */}
         <div className="space-y-8">
           <p className="text-gray-500 leading-relaxed text-lg italic font-light">
-            {t(product.description)}
+            {t(product.description, lang)}
           </p>
           
           <div className="grid grid-cols-2 gap-8">
@@ -210,7 +232,7 @@ export default function ProductDetailView({ product, lang }: Props) {
               <div className="p-3 bg-gray-50 rounded-2xl text-gray-400"><Layers size={20} /></div>
               <div>
                 <p className="text-[10px] text-gray-400 uppercase font-black">{lang === 'zh' ? '分类' : 'Category'}</p>
-                <p className="font-bold text-gray-900">{t(product.category)}</p>
+                <p className="font-bold text-gray-900">{t(product.category, lang)}</p>
               </div>
             </div>
             <div className="flex items-center gap-4">

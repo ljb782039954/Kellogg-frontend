@@ -52,7 +52,7 @@ const bulkPrice = product.bulkPrices?.[0];
               ? `${bulkPrice.minQty}-${bulkPrice.maxQty} PCS`
               : `${bulkPrice.minQty}+ PCS`}
           </p>
-          <p class="text-sm md:text-base font-bold text-gray-900">
+          <p class="text-sm md:text-base font-bold text-gray-900" data-base-price={bulkPrice.price}>
             {formatPrice(bulkPrice.price)}
           </p>
         </>

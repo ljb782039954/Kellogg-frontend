@@ -112,7 +112,12 @@ export default function ImageFull({
             src={image}
             alt={t(alt)}
             className="max-w-full max-h-full object-contain shadow-2xl animate-in zoom-in-95 duration-300"
-            width={1920}
+            width={1280}
+            responsive={{
+              sm: 640,
+              md: 1024,
+              lg: 1280
+            }}
             onClick={(e) => e.stopPropagation()}
           />
         </div>

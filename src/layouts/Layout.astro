@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import { getSiteData } from "../lib/site";
+import { SiteService } from "../services/siteService";
 import Header from "../components/Header";
 import Footer from "../components/Footer.astro";
 import TawkChat from "../components/TawkChat.astro";
@@ -8,67 +8,104 @@ import { createTranslate } from "../lib/i18n";
 import type { Translation, Language } from "../types";
 
 interface Props {
-	title?: string | Translation;
-	description?: string | Translation;
-	lang?: Language;
+  title?: string | Translation;
+  description?: string | Translation;
+  lang?: Language;
   seo?: {
     title?: string | Translation;
     description?: string | Translation;
     keywords?: string | Translation;
-  }
+  };
 }
 
 const { lang = "en", seo } = Astro.props;
-const siteData = await getSiteData(Astro);
-const { companyInfo, header, footer, lang: detectedLang } = siteData;
+const siteData = await SiteService.getSiteData(Astro);
+const {
+  companyInfo,
+  header,
+  footer,
+  lang: detectedLang,
+  exchangeRates,
+} = siteData;
 
 const t = createTranslate(lang);
 
-const displayTitle = seo?.title ? t(seo.title) : (typeof Astro.props.title === 'string' ? Astro.props.title : (Astro.props.title ? t(Astro.props.title) : "Kellogg Fashion"));
-const displayDescription = seo?.description ? t(seo.description) : (typeof Astro.props.description === 'string' ? Astro.props.description : (Astro.props.description ? t(Astro.props.description) : ""));
+const displayTitle = seo?.title
+  ? t(seo.title)
+  : typeof Astro.props.title === "string"
+    ? Astro.props.title
+    : Astro.props.title
+      ? t(Astro.props.title)
+      : "Kellogg Fashion";
+const displayDescription = seo?.description
+  ? t(seo.description)
+  : typeof Astro.props.description === "string"
+    ? Astro.props.description
+    : Astro.props.description
+      ? t(Astro.props.description)
+      : "";
 const displayKeywords = seo?.keywords ? t(seo.keywords) : "";
-
 ---
 
 <!doctype html>
 <html lang={lang}>
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/logo/logo.jpg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{displayTitle}</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/logo/logo.jpg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{displayTitle}</title>
     <meta name="description" content={displayDescription} />
     {displayKeywords && <meta name="keywords" content={displayKeywords} />}
-    
-    <link rel="alternate" href="https://kellogg-fashion.com/" hreflang="x-default" />
-    <link rel="alternate" href="https://kelloggfashion.com/usa-heavyweight-hoodie-manufacturer" hreflang="en-US" />
-    <link rel="alternate" href="https://kelloggfashion.com/uk-streetwear-clothing-manufacturer" hreflang="en-UK" />
-    <link rel="alternate" href="https://kelloggfashion.com/canada-blank-apparel-supplier" hreflang="en-CA" />
-    <link rel="alternate" href="https://kelloggfashion.com/australia-heavyweight-tshirt-supplier" hreflang="en-AU" />
+
+    <link
+      rel="alternate"
+      href="https://kellogg-fashion.com/"
+      hreflang="x-default"
+    />
+    <link
+      rel="alternate"
+      href="https://kelloggfashion.com/usa-heavyweight-hoodie-manufacturer"
+      hreflang="en-US"
+    />
+    <link
+      rel="alternate"
+      href="https://kelloggfashion.com/uk-streetwear-clothing-manufacturer"
+      hreflang="en-UK"
+    />
+    <link
+      rel="alternate"
+      href="https://kelloggfashion.com/canada-blank-apparel-supplier"
+      hreflang="en-CA"
+    />
+    <link
+      rel="alternate"
+      href="https://kelloggfashion.com/australia-heavyweight-tshirt-supplier"
+      hreflang="en-AU"
+    />
 
     <!-- Google Fonts or other assets can be added here -->
-	</head>
-	<body class="bg-background text-foreground selection:bg-primary/10">
-    <Header 
-      client:load 
-      header={header} 
-      companyInfo={companyInfo} 
-      lang={lang} 
+    <script is:inline define:vars={{ initialRates: exchangeRates?.rates }}>
+      window.__EXCHANGE_RATES__ = initialRates;
+    </script>
+  </head>
+  <body class="bg-background text-foreground selection:bg-primary/10">
+    <Header
+      client:load
+      header={header}
+      companyInfo={companyInfo}
+      lang={lang}
       pathname={Astro.url.pathname}
+      initialRates={exchangeRates?.rates}
     />
     <TawkChat />
-    
+
     <main class="mt-16 md:mt-20">
-		  <slot />
+      <slot />
     </main>
 
-    <Footer 
-      footer={footer} 
-      companyInfo={companyInfo} 
-      lang={lang} 
-    />
-	</body>
+    <Footer footer={footer} companyInfo={companyInfo} lang={lang} />
+  </body>
 </html>
 
 <style is:global>
@@ -82,3 +119,8 @@ const displayKeywords = seo?.keywords ? t(seo.keywords) : "";
     }
   }
 </style>
+
+<script>
+  import { initPriceTracker } from "../utils/priceTracker";
+  initPriceTracker();
+</script>

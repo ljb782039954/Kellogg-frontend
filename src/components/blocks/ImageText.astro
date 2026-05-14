@@ -7,37 +7,42 @@ interface Props {
   title?: Translation;
   content?: Translation;
   image?: string;
-  imagePosition?: 'left' | 'right';
+  imagePosition?: "left" | "right";
   buttonText?: Translation;
   buttonLink?: string;
   lang: Language;
 }
 
-const { 
-  title, 
-  content, 
-  image, 
-  imagePosition = 'left', 
-  buttonText, 
+const {
+  title,
+  content,
+  image,
+  imagePosition = "left",
+  buttonText,
   buttonLink,
-  lang
+  lang,
 } = Astro.props;
 
 const t = createTranslate(lang);
 
-const value = content ? t(content) : '';
+const value = content ? t(content) : "";
 // 匹配双正斜杠 // 或双反斜杠 \\ 进行拆分
-const parts = value.split(/\/\/|\\\\/).map(p => p.trim()).filter(p => p !== '');
+const parts = value
+  .split(/\/\/|\\\\/)
+  .map((p) => p.trim())
+  .filter((p) => p !== "");
 
-const isInternal = buttonLink?.startsWith('/');
+const isInternal = buttonLink?.startsWith("/");
 ---
 
 <section class="py-12">
   <div class="container mx-auto px-4">
-    <div class:list={[
-      "flex flex-col md:flex-row items-center gap-8 md:gap-12 px-4",
-      imagePosition === 'right' ? 'md:flex-row-reverse' : ''
-    ]}>
+    <div
+      class:list={[
+        "flex flex-col md:flex-row items-center gap-8 md:gap-12 px-4",
+        imagePosition === "right" ? "md:flex-row-reverse" : "",
+      ]}
+    >
       {/* 图片 */}
       <div class="flex-1 w-full">
         <div class="aspect-[4/3] rounded-lg overflow-hidden">
@@ -46,9 +51,9 @@ const isInternal = buttonLink?.startsWith('/');
             alt={title ? t(title) : "Section Image"}
             class="w-full h-full object-cover"
             responsive={{
-              sm: 640,
-              md: 800,
-              lg: 1024
+              sm: 320,
+              md: 500,
+              lg: 640,
             }}
           />
         </div>
@@ -56,38 +61,42 @@ const isInternal = buttonLink?.startsWith('/');
 
       {/* 文本 */}
       <div class="flex-1 space-y-4">
-        {title && (
-          <h3 class="text-2xl md:text-4xl font-bold">
-            {t(title)}
-          </h3>
-        )}
-        
-        {parts.length > 1 ? (
-          <ul class="space-y-1.5 mt-1">
-            {parts.map((part, i) => (
-              <li class="flex items-start gap-2 text-gray-600 text-sm leading-relaxed">
-                {i != 0 && <span class="text-gray-900 font-black text-lg -mt-1">·</span>}
-                <span>{part}</span>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p class="text-gray-600 text-md md:text-lg leading-relaxed">
-            {value}
-          </p>
-        )}
+        {title && <h3 class="text-2xl md:text-4xl font-bold">{t(title)}</h3>}
 
-        {buttonText && buttonLink && (
-          <a
-            href={buttonLink}
-            target={isInternal ? undefined : "_blank"}
-            rel={isInternal ? undefined : "noopener noreferrer"}
-          >
-            <button class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
-              {t(buttonText)}
-            </button>
-          </a>
-        )}
+        {
+          parts.length > 1 ? (
+            <ul class="space-y-1.5 mt-1">
+              {parts.map((part, i) => (
+                <li class="flex items-start gap-2 text-gray-600 text-sm leading-relaxed">
+                  {i != 0 && (
+                    <span class="text-gray-900 font-black text-lg -mt-1">
+                      ·
+                    </span>
+                  )}
+                  <span>{part}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="text-gray-600 text-md md:text-lg leading-relaxed">
+              {value}
+            </p>
+          )
+        }
+
+        {
+          buttonText && buttonLink && (
+            <a
+              href={buttonLink}
+              target={isInternal ? undefined : "_blank"}
+              rel={isInternal ? undefined : "noopener noreferrer"}
+            >
+              <button class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                {t(buttonText)}
+              </button>
+            </a>
+          )
+        }
       </div>
     </div>
   </div>

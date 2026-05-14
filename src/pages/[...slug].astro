@@ -3,13 +3,13 @@ export const prerender = true;
 
 import Layout from "../layouts/Layout.astro";
 import { api } from "../lib/api";
-import { getSiteData } from "../lib/site";
+import { SiteService } from "../services/siteService";
 import DynamicRenderer from "../components/DynamicRenderer.astro";
 import InquirySection from "../components/blocks/InquirySection";
 
 export async function getStaticPaths() {
   // 在构建时获取所有站点数据
-  const { pages } = await getSiteData(); 
+  const { pages } = await SiteService.getSiteData(); 
   
   return pages.map(page => {
     // 处理路径，去掉前缀斜杠并处理空路径（首页）
@@ -26,7 +26,7 @@ const { pageId } = Astro.props;
 const path = slug === undefined ? "/" : `/${slug}`;
 
 // 1. 获取站点全局数据
-const siteData = await getSiteData(Astro);
+const siteData = await SiteService.getSiteData(Astro);
 const { lang } = siteData;
 
 // 2. 获取页面的详细数据 (包含积木块)

@@ -9,7 +9,7 @@ interface CtaBannerValues {
   secondaryButton?: NavLink;
   backgroundImage?: string;
   backgroundColor?: string;
-  alignment?: 'left' | 'center' | 'right';
+  alignment?: "left" | "center" | "right";
 }
 
 interface Props {
@@ -23,47 +23,72 @@ const { title, subtitle, values, lang } = Astro.props;
 const t = createTranslate(lang);
 
 const alignClass = {
-  left: 'text-left items-start',
-  center: 'text-center items-center',
-  right: 'text-right items-end',
-}[values?.alignment || 'center'];
+  left: "text-left items-start",
+  center: "text-center items-center",
+  right: "text-right items-end",
+}[values?.alignment || "center"];
 ---
 
 <div class="relative rounded-2xl overflow-hidden text-white my-8 mx-4">
-  {values?.backgroundImage ? (
-    <>
-      <img
-        src={values.backgroundImage}
-        alt=""
-        class="absolute inset-0 w-full h-full object-cover"
+  {
+    values?.backgroundImage ? (
+      <>
+        <OptimizedImage
+          src={values.backgroundImage}
+          alt=""
+          class="absolute inset-0 w-full h-full object-cover"
+          sizes="100vw"
+        />
+        <div class="absolute inset-0 bg-black/50" />
+      </>
+    ) : (
+      <div
+        class="absolute inset-0 bg-gradient-to-br from-primary to-purple-700"
+        style={
+          values?.backgroundColor
+            ? { backgroundColor: values.backgroundColor }
+            : undefined
+        }
       />
-      <div class="absolute inset-0 bg-black/50" />
-    </>
-  ) : (
-    <div
-      class="absolute inset-0 bg-gradient-to-br from-primary to-purple-700"
-      style={values?.backgroundColor ? { backgroundColor: values.backgroundColor } : undefined}
-    />
-  )}
-  <div class:list={["relative container mx-auto px-6 py-16 flex flex-col", alignClass]}>
-    {title && <SectionHeader lang={lang} title={title} subtitle={subtitle} theme="dark" />}
+    )
+  }
+  <div
+    class:list={[
+      "relative container mx-auto px-6 py-16 flex flex-col",
+      alignClass,
+    ]}
+  >
+    {
+      title && (
+        <SectionHeader
+          lang={lang}
+          title={title}
+          subtitle={subtitle}
+          theme="dark"
+        />
+      )
+    }
     <div class="flex flex-wrap gap-4 mt-6">
-      {values?.primaryButton?.name && (
-        <a
-          href={values.primaryButton.href}
-          class="px-8 py-3 bg-white text-gray-900 rounded-lg font-bold hover:bg-gray-100 transition-colors shadow-lg"
-        >
-          {t(values.primaryButton.name)}
-        </a>
-      )}
-      {values?.secondaryButton?.name && (
-        <a
-          href={values.secondaryButton.href}
-          class="px-8 py-3 bg-white/20 backdrop-blur-sm text-white border border-white/30 rounded-lg font-bold hover:bg-white/30 transition-colors"
-        >
-          {t(values.secondaryButton.name)}
-        </a>
-      )}
+      {
+        values?.primaryButton?.name && (
+          <a
+            href={values.primaryButton.href}
+            class="px-8 py-3 bg-white text-gray-900 rounded-lg font-bold hover:bg-gray-100 transition-colors shadow-lg"
+          >
+            {t(values.primaryButton.name)}
+          </a>
+        )
+      }
+      {
+        values?.secondaryButton?.name && (
+          <a
+            href={values.secondaryButton.href}
+            class="px-8 py-3 bg-white/20 backdrop-blur-sm text-white border border-white/30 rounded-lg font-bold hover:bg-white/30 transition-colors"
+          >
+            {t(values.secondaryButton.name)}
+          </a>
+        )
+      }
     </div>
   </div>
 </div>

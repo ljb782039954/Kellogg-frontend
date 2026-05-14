@@ -1,8 +1,9 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { SlidersHorizontal } from 'lucide-react';
 import type { Product, Category, SortOption, Language } from '../../types';
 import ProductCard from './ProductCard';
 import Pagination from '../Pagination';
+import { t } from '../../utils/common';
 
 export interface ProductGridProps {
   itemsPerPage?: number;
@@ -10,6 +11,13 @@ export interface ProductGridProps {
   products: Product[];
   lang: Language;
 }
+
+const SORT_OPTIONS: SortOption[] = [
+  { id: 'newest', name: { zh: '最新上架', en: 'Newest' } },
+  { id: 'price-asc', name: { zh: '价格从低到高', en: 'Price Low-High' } },
+  { id: 'price-desc', name: { zh: '价格从高到低', en: 'Price High-Low' } },
+  { id: 'sales', name: { zh: '销量优先', en: 'Best Selling' } },
+];
 
 export default function ProductGrid({
   itemsPerPage = 12,
@@ -21,41 +29,35 @@ export default function ProductGrid({
   const [sortBy, setSortBy] = useState('newest');
   const [currentPage, setCurrentPage] = useState(1);
 
-  const t = (obj: { zh: string; en: string } | undefined) => {
-    if (!obj) return '';
-    return lang === 'zh' ? obj.zh : obj.en;
-  };
-
-  const sortOptions: SortOption[] = [
-    { id: 'newest', name: { zh: '最新上架', en: 'Newest' } },
-    { id: 'price-asc', name: { zh: '价格从低到高', en: 'Price Low-High' } },
-    { id: 'price-desc', name: { zh: '价格从高到低', en: 'Price High-Low' } },
-    { id: 'sales', name: { zh: '销量优先', en: 'Best Selling' } },
-  ];
-
-  // 1. 筛选产品
+  // 1. 筛选并排序产品
   const filteredProducts = useMemo(() => {
     let result = [...products];
+    
+    // 筛选
     if (selectedCategory !== 'all') {
       result = result.filter((p) => p.category === selectedCategory);
     }
 
-    // 2. 排序
-    if (sortBy === 'price-asc') {
-      result.sort((a, b) => a.price - b.price);
-    } else if (sortBy === 'price-desc') {
-      result.sort((a, b) => b.price - a.price);
-    } else if (sortBy === 'sales') {
-      result.sort((a, b) => (b.sales || 0) - (a.sales || 0));
-    } else {
-      result.sort((a, b) =>
-        new Date(b.releaseDate || 0).getTime() - new Date(a.releaseDate || 0).getTime()
-      );
+    // 排序
+    switch (sortBy) {
+      case 'price-asc':
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-desc':
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case 'sales':
+        result.sort((a, b) => (b.sales || 0) - (a.sales || 0));
+        break;
+      default:
+        result.sort((a, b) =>
+          new Date(b.releaseDate || 0).getTime() - new Date(a.releaseDate || 0).getTime()
+        );
     }
     return result;
   }, [products, selectedCategory, sortBy]);
 
-  // 3. 分页
+  // 2. 分页逻辑
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const paginatedProducts = filteredProducts.slice(
     (currentPage - 1) * itemsPerPage,
@@ -65,19 +67,15 @@ export default function ProductGrid({
   return (
     <section className="pt-20 w-full">
       <div className="container mx-auto px-4">
-        {/* Filters */}
+        {/* Filters Bar */}
         <div className="w-full border-b border-gray-200">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 py-4">
+            {/* Category Filter */}
             <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => {
-                  setSelectedCategory('all');
-                  setCurrentPage(1);
-                }}
+                onClick={() => { setSelectedCategory('all'); setCurrentPage(1); }}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  selectedCategory === 'all'
-                  ? 'bg-gray-800 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  selectedCategory === 'all' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
                 {lang === 'zh' ? '全部' : 'All'}
@@ -85,34 +83,27 @@ export default function ProductGrid({
               {categories.map((cat) => (
                 <button
                   key={cat.id}
-                  onClick={() => {
-                    setSelectedCategory(cat.id);
-                    setCurrentPage(1);
-                  }}
+                  onClick={() => { setSelectedCategory(cat.id); setCurrentPage(1); }}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    selectedCategory === cat.id
-                    ? 'bg-gray-800 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    selectedCategory === cat.id ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
-                  {t(cat.name)}
+                  {t(cat.name, lang)}
                 </button>
               ))}
             </div>
 
+            {/* Sort Dropdown */}
             <div className="flex items-center gap-2">
               <SlidersHorizontal className="w-4 h-4 text-gray-400" />
               <select
                 value={sortBy}
-                onChange={(e) => {
-                  setSortBy(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="px-4 py-2 bg-gray-100 rounded-lg text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-800"
+                onChange={(e) => { setSortBy(e.target.value); setCurrentPage(1); }}
+                className="px-4 py-2 bg-gray-100 rounded-lg text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-800 border-none"
               >
-                {sortOptions.map((opt) => (
+                {SORT_OPTIONS.map((opt) => (
                   <option key={opt.id} value={opt.id}>
-                    {t(opt.name)}
+                    {t(opt.name, lang)}
                   </option>
                 ))}
               </select>
@@ -120,7 +111,7 @@ export default function ProductGrid({
           </div>
         </div>
 
-        {/* Products Grid */}
+        {/* Products Grid Display */}
         <div className="py-12">
           {paginatedProducts.length === 0 ? (
             <div className="text-center py-16">
@@ -130,13 +121,9 @@ export default function ProductGrid({
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                 {paginatedProducts.map((product, index) => (
-                  <a
-                    key={product.id}
-                    href={`/product/${product.id}`}
-                    className="block group"
-                  >
+                  <a key={product.id} href={`/product/${product.id}`} className="block group h-full">
                     <ProductCard lang={lang} product={product} index={index} />
                   </a>
                 ))}
