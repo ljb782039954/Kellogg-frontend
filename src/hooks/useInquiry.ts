@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../lib/api';
 import type { Language } from '../types';
-
+// 重试
 export interface InquiryFormData {
   name: string;
   email: string;
