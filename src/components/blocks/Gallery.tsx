@@ -71,11 +71,6 @@ export default function Gallery({ title, subtitle, items = [], lang }: GalleryPr
                 src={img.src}
                 alt={t(img.caption)}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                responsive={{
-                  sm: 320,
-                  md: 400,
-                  lg: 500
-                }}
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity text-white text-center">

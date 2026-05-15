@@ -45,11 +45,6 @@ export default function ProductCard({
                         src={product.image}
                         alt={t(product.name, lang)}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        responsive={{
-                            sm: 200,
-                            md: 320,
-                            lg: 400
-                        }}
                     />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-300">

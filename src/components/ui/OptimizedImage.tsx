@@ -7,20 +7,13 @@ interface OptimizedImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElem
   width?: number;
   height?: number;
   priority?: boolean;
-  responsive?: {
-    sm?: number;
-    md?: number;
-    lg?: number;
-    xl?: number;
-  };
 }
 
 export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   src,
-  width = 768,
+  width = 800,
   height,
   priority = false,
-  responsive,
   className,
   alt = '',
   sizes: propSizes,
@@ -34,41 +27,16 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const srcSet = useMemo(() => {
     if (!src) return undefined;
 
-    if (responsive) {
-      const widths = [
-        responsive.sm, 
-        responsive.md, 
-        responsive.lg, 
-        responsive.xl
-      ].filter((w): w is number => !!w);
-
-      if (widths.length > 0) {
-        return widths
-          .sort((a, b) => a - b)
-          .map(w => `${api.getOptimizedImageUrl(src, w)} ${w}w`)
-          .join(', ');
-      }
-    }
-
-    const defaultWidths = [320, 480, 768, 1024, 1200, 1600];
+    const defaultWidths = [200, 320, 480, 640, 800, 960, 1080, 1280, 1440, 1600, 1920];
     return defaultWidths
       .map(w => `${api.getOptimizedImageUrl(src, w)} ${w}w`)
       .join(', ');
-  }, [src, responsive]);
+  }, [src]);
 
   const sizes = useMemo(() => {
     if (propSizes) return propSizes;
-    if (!responsive) return '(max-width: 768px) 100vw, 1200px';
-
-    const parts = [];
-    if (responsive.xl) parts.push(`(min-width: 1280px) ${responsive.xl}px`);
-    if (responsive.lg) parts.push(`(min-width: 1024px) ${responsive.lg}px`);
-    if (responsive.md) parts.push(`(min-width: 768px) ${responsive.md}px`);
-    if (responsive.sm) parts.push(`(min-width: 640px) ${responsive.sm}px`);
-    
-    parts.push(`${width}px`);
-    return parts.join(', ');
-  }, [responsive, width, propSizes]);
+    return '(max-width: 768px) 100vw, 33vw';
+  }, [propSizes]);
 
   if (!src) {
     return (

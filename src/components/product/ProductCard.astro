@@ -22,11 +22,6 @@ const bulkPrice = product.bulkPrices?.[0];
         src={product.image}
         alt={t(product.name)}
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-        responsive={{
-          sm: 320,
-          md: 400,
-          lg: 400
-        }}
       />
     ) : (
       <div class="w-full h-full flex items-center justify-center text-gray-300">

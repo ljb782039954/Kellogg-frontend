@@ -162,7 +162,7 @@ export default function ProductDetailView({ product, lang }: Props) {
         <div className="space-y-10 py-10 border-y border-gray-100">
           {product.colors && product.colors.length > 0 && (
             <div className="space-y-4">
-              <div className="flex justify-between items-center">
+              <div className="flex gap-2 md:gap-4 items-center">
                 <span className="text-xs font-bold uppercase tracking-widest text-gray-400">{lang === 'zh' ? '颜色' : 'Color'}</span>
                 <span className="text-sm font-bold text-gray-900">
                   {selectedColorIndex !== null ? t(product.colors[selectedColorIndex].name, lang) : (lang === 'zh' ? '请选择' : 'Select')}
@@ -195,7 +195,7 @@ export default function ProductDetailView({ product, lang }: Props) {
 
           {product.sizes && product.sizes.length > 0 && (
             <div className="space-y-4">
-              <div className="flex justify-between items-center">
+              <div className="flex gap-2 md:gap-4 items-center">
                 <span className="text-xs font-bold uppercase tracking-widest text-gray-400">{lang === 'zh' ? '尺码' : 'Size'}</span>
                 <span className="text-sm font-bold text-gray-900">{selectedSize || (lang === 'zh' ? '请选择' : 'Select')}</span>
               </div>

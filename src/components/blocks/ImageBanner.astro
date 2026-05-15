@@ -29,10 +29,10 @@ const {
 const t = createTranslate(lang);
 
 const heightClasses = {
-  small: "h-48",
-  medium: "h-64",
-  large: "h-86",
-  full: "h-108",
+  small: "h-48 md:h-64",
+  medium: "h-64 md:h-[400px]",
+  large: "h-96 md:h-[600px]",
+  full: "h-screen",
 };
 ---
 
@@ -40,7 +40,7 @@ const heightClasses = {
   <OptimizedImage
     src={image}
     alt={title ? t(title) : "Banner"}
-    class="absolute inset-0 w-full h-full object-cover"
+    class="absolute inset-0 w-full h-full object-cover object-center"
     sizes="100vw"
   />
 

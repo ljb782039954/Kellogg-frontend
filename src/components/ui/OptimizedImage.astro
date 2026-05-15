@@ -7,21 +7,14 @@ interface Props extends astroHTML.JSX.ImgHTMLAttributes {
   width?: number;
   height?: number;
   priority?: boolean;
-  responsive?: {
-    sm?: number;
-    md?: number;
-    lg?: number;
-    xl?: number;
-  };
   class?: string;
 }
 
 const {
   src,
-  width = 768,
+  width = 800,
   height,
   priority = false,
-  responsive,
   class: className,
   alt = "",
   sizes: propSizes,
@@ -34,45 +27,14 @@ const imageUrl = src ? api.getOptimizedImageUrl(src, width) : "";
 // 2. 计算 srcSet
 let srcSet = undefined;
 if (src) {
-  if (responsive) {
-    const widths = [
-      responsive.sm,
-      responsive.md,
-      responsive.lg,
-      responsive.xl,
-    ].filter((w): w is number => !!w);
-
-    if (widths.length > 0) {
-      srcSet = widths
-        .sort((a, b) => a - b)
-        .map((w) => `${api.getOptimizedImageUrl(src, w)} ${w}w`)
-        .join(", ");
-    }
-  }
-
-  if (!srcSet) {
-    const defaultWidths = [320, 480, 768, 1024, 1200, 1600];
-    srcSet = defaultWidths
-      .map((w) => `${api.getOptimizedImageUrl(src, w)} ${w}w`)
-      .join(", ");
-  }
+  const defaultWidths = [200, 320, 480, 640, 800, 960, 1080, 1280, 1440, 1600, 1920];
+  srcSet = defaultWidths
+    .map((w) => `${api.getOptimizedImageUrl(src, w)} ${w}w`)
+    .join(", ");
 }
 
 // 3. 计算 sizes
-let sizes = propSizes;
-if (!sizes) {
-  if (!responsive) {
-    sizes = "(max-width: 768px) 100vw, 1200px";
-  } else {
-    const parts = [];
-    if (responsive.xl) parts.push(`(min-width: 1280px) ${responsive.xl}px`);
-    if (responsive.lg) parts.push(`(min-width: 1024px) ${responsive.lg}px`);
-    if (responsive.md) parts.push(`(min-width: 768px) ${responsive.md}px`);
-    if (responsive.sm) parts.push(`(min-width: 640px) ${responsive.sm}px`);
-    parts.push(`${width}px`);
-    sizes = parts.join(", ");
-  }
-}
+const sizes = propSizes || "(max-width: 768px) 100vw, 33vw";
 ---
 
 {
