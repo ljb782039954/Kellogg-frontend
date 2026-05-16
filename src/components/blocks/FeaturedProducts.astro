@@ -11,22 +11,17 @@ interface Props {
   lang: Language;
 }
 
+import FeaturedProductsReact from "./FeaturedProducts.tsx";
+
 const { title, subtitle, maxItems, products = [], lang } = Astro.props;
-const displayedProducts = maxItems ? products.slice(0, maxItems) : products;
 ---
 
-{displayedProducts.length > 0 && (
-  <section class="py-8 w-full">
-    <div class="container mx-auto px-4">
-      {title && <SectionHeader lang={lang} title={title} subtitle={subtitle} theme="light" />}
-      
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {displayedProducts.map((product, index) => (
-          <a href={`/product/${product.id}`} class="block h-full">
-            <ProductCard product={product} index={index} lang={lang} />
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
+<FeaturedProductsReact 
+  client:load 
+  title={title} 
+  subtitle={subtitle} 
+  maxItems={maxItems} 
+  initialProducts={products}
+  lang={lang} 
+/>
 )}

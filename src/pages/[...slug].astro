@@ -5,13 +5,15 @@ import Layout from "../layouts/Layout.astro";
 import { api } from "../lib/api";
 import { SiteService } from "../services/siteService";
 import DynamicRenderer from "../components/DynamicRenderer.astro";
-import InquirySection from "../components/blocks/InquirySection";
+import InquiryView from "../components/pages/InquiryView";
 
 export async function getStaticPaths() {
   // 在构建时获取所有站点数据
   const { pages } = await SiteService.getSiteData(); 
   
-  return pages.map(page => {
+  return pages
+    .filter(page => page.id !== 'products') // 排除掉由 products.astro 处理的页面
+    .map(page => {
     // 处理路径，去掉前缀斜杠并处理空路径（首页）
     const slug = page.path === '/' ? undefined : page.path.replace(/^\//, '');
     return {
@@ -38,12 +40,10 @@ if (!fullPage) {
 }
 ---
 
-<Layout title={fullPage.title} lang={lang} seo={fullPage.seo}>
+<Layout title={fullPage.title} lang={lang} seo={fullPage.seo} hideInquiry={pageId === "system-inquiry"}>
   {
     pageId === "system-inquiry" ? (
-      <div class="py-12">
-        <InquirySection lang={lang} client:load />
-      </div>
+      <InquiryView lang={lang} companyInfo={siteData.companyInfo} client:load />
     ) : (
       <DynamicRenderer schema={fullPage} lang={lang} />
     )

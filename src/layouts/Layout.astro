@@ -6,11 +6,13 @@ import Footer from "../components/Footer.astro";
 import TawkChat from "../components/TawkChat.astro";
 import { createTranslate } from "../lib/i18n";
 import type { Translation, Language } from "../types";
+import InquirySection from "../components/blocks/InquirySection";
 
 interface Props {
   title?: string | Translation;
   description?: string | Translation;
   lang?: Language;
+  hideInquiry?: boolean;
   seo?: {
     title?: string | Translation;
     description?: string | Translation;
@@ -18,7 +20,7 @@ interface Props {
   };
 }
 
-const { lang = "en", seo } = Astro.props;
+const { lang = "en", seo, hideInquiry = false } = Astro.props;
 const siteData = await SiteService.getSiteData(Astro);
 const {
   companyInfo,
@@ -30,7 +32,11 @@ const {
 
 const t = createTranslate(lang);
 
+// 自动检测是否为询盘页面
+const isInquiryPage = Astro.url.pathname.includes('/inquiry') || hideInquiry;
+
 const displayTitle = seo?.title
+// ... (lines 34-47 remain the same)
   ? t(seo.title)
   : typeof Astro.props.title === "string"
     ? Astro.props.title
@@ -102,6 +108,7 @@ const displayKeywords = seo?.keywords ? t(seo.keywords) : "";
 
     <main class="mt-16 md:mt-20">
       <slot />
+      {!isInquiryPage && <InquirySection lang={lang} client:visible />}
     </main>
 
     <Footer footer={footer} companyInfo={companyInfo} lang={lang} />

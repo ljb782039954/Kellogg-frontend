@@ -8,10 +8,9 @@ interface Props {
   footer: FooterContent;
   companyInfo: CompanyInfo;
   lang: Language;
-  theme?: 'light' | 'dark' | 'vintage' | 'street' | 'luxury';
 }
 
-const { footer, companyInfo, lang, theme = 'light' } = Astro.props;
+const { footer, companyInfo, lang } = Astro.props;
 const t = createTranslate(lang);
 
 const themeStyles = {
@@ -26,7 +25,7 @@ const themeStyles = {
   },
 };
 
-const style = themeStyles[theme];
+const style = themeStyles['light'];
 ---
 
 <footer id="footer" class={`${style.bg} pt-16 pb-8`}>
@@ -95,7 +94,7 @@ const style = themeStyles[theme];
             <span>{companyInfo.contact.email}</span>
           </li>
           <li class={`flex items-start gap-3 ${style.textMuted}`}>
-            <MapPin size={20} class="mt-0.5" />
+            <MapPin size={20} className="mt-0.5" />
             <span>{t(companyInfo.contact.address)}</span>
           </li>
         </ul>
