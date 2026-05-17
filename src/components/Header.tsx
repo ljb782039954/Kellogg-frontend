@@ -41,9 +41,9 @@ export default function Header({
 
   // 样式定义
   const style = {
-    bg: isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-transparent',
-    text: isScrolled ? 'text-gray-800' : 'text-gray-900',
-    border: isScrolled ? 'border-gray-100' : 'border-white/10',
+    bg: 'bg-white/95 backdrop-blur-md shadow-sm',
+    text: 'text-gray-800',
+    border: 'border-gray-100',
   };
 
   const handleShare = () => {
@@ -77,25 +77,30 @@ export default function Header({
             {companyInfo.logo && (
               <img src={companyInfo.logo} alt="Logo" className="w-8 h-8 md:w-10 md:h-10 object-contain" />
             )}
-            <span className={`text-xl md:text-2xl font-bold tracking-wider ${style.text}`}>
+            <span className={`text-base md:text-lg lg:text-xl font-bold tracking-wider ${style.text}`}>
               {t(companyInfo.name, lang)}
             </span>
           </a>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation , 最多显示5个，剩下的用 ... */}
           <nav className="hidden md:flex items-center gap-8">
-            {header.navItems.map((item) => (
-              <div key={item.href}>
-                <a
-                  href={item.href}
-                  className={`text-sm font-medium ${style.text} ${
-                    pathname === item.href ? 'opacity-100' : 'opacity-70'
+            {header.navItems.map((item, index) => {
+              if (index < 5) {
+                return (
+                  <div key={item.href}>
+                    <a
+                      href={item.href}
+                      className={`text-sm font-medium ${style.text} ${
+                        pathname === item.href ? 'opacity-100' : 'opacity-70'
                   } hover:opacity-100 transition-opacity`}
                 >
                   {t(item.name, lang)}
                 </a>
               </div>
-            ))}
+                );
+              }
+              return null;
+            })}
           </nav>
 
           {/* Right Actions */}

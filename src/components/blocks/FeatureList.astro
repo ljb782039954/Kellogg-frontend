@@ -26,7 +26,7 @@ const t = createTranslate(lang);
     <div class="container mx-auto px-4">
       {title && <SectionHeader lang={lang} title={title} subtitle={subtitle} theme="light" />}
       
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] md:grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4 md:gap-6">
         {items.map((item) => {
           const Icon = (LucideIcons as any)[item.icon] || LucideIcons.Star;
           return (

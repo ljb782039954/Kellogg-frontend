@@ -22,6 +22,8 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({
   const [loading, setLoading] = useState(initialProducts.length === 0);
   const t = createTranslate(lang);
 
+  const displayLimit = maxItems || 8;
+
   useEffect(() => {
     // 在客户端重新抓取最新数据
     const fetchLatest = async () => {
@@ -43,8 +45,8 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({
       <section className="py-8 w-full animate-pulse">
         <div className="container mx-auto px-4">
           <div className="h-8 w-48 bg-gray-200 rounded mb-4"></div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[1, 2, 3, 4].map(i => (
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4">
+            {Array.from({ length: maxItems || 8 }).map((_, i) => (
               <div key={i} className="aspect-[3/4] bg-gray-200 rounded"></div>
             ))}
           </div>
@@ -65,8 +67,8 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({
           </div>
         )}
         
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {products.map((product) => (
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4">
+          {products.slice(0, displayLimit).map((product) => (
             <a key={product.id} href={`/product/${product.id}`} className="block group">
               <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-gray-100">
                 <img 

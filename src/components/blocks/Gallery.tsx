@@ -58,7 +58,7 @@ export default function Gallery({ title, subtitle, items = [], lang }: GalleryPr
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-2 md:grid-cols-3 gap-4 px-4"
+          className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] md:grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 px-4"
         >
           {items.map((img, i) => (
             <motion.div

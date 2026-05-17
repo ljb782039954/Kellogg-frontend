@@ -34,7 +34,7 @@ const t = createTranslate(lang);
           />
         )}
 
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 px-4">
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] md:grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 px-4">
           {items.map((img, i) => (
             <div
               class="group relative aspect-square rounded-lg overflow-hidden cursor-pointer gallery-item"

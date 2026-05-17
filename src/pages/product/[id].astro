@@ -103,7 +103,7 @@ const seo = {
             </a>
           </div>
 
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+          <div class="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6 md:gap-8">
             {relatedProducts.map((p) => (
               <a href={`/product/${p.id}`} class="block h-full">
                 <ProductCard product={p as any} lang={lang} />

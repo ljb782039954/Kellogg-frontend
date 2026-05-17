@@ -20,11 +20,13 @@ const SORT_OPTIONS: SortOption[] = [
 ];
 
 export default function ProductGrid({
-  itemsPerPage = 12,
+  itemsPerPage: defaultItemsPerPage = 12,
   categories = [],
   products = [],
   lang,
 }: ProductGridProps) {
+  const currentItemsPerPage = defaultItemsPerPage;
+
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,10 +60,10 @@ export default function ProductGrid({
   }, [products, selectedCategory, sortBy]);
 
   // 2. 分页逻辑
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredProducts.length / currentItemsPerPage);
   const paginatedProducts = filteredProducts.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    (currentPage - 1) * currentItemsPerPage,
+    currentPage * currentItemsPerPage
   );
 
   return (
@@ -121,7 +123,7 @@ export default function ProductGrid({
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4 md:gap-6">
                 {paginatedProducts.map((product, index) => (
                   <a key={product.id} href={`/product/${product.id}`} className="block group h-full">
                     <ProductCard lang={lang} product={product} index={index} />
