@@ -1,7 +1,5 @@
 ---
 import type { Translation, Product, Language } from "../../types";
-import ProductCard from "../product/ProductCard.astro";
-import SectionHeader from "../SectionHeader.astro";
 
 interface Props {
   title?: Translation;
@@ -16,12 +14,12 @@ import FeaturedProductsReact from "./FeaturedProducts.tsx";
 const { title, subtitle, maxItems, products = [], lang } = Astro.props;
 ---
 
-<FeaturedProductsReact 
-  client:load 
-  title={title} 
-  subtitle={subtitle} 
-  maxItems={maxItems} 
+<FeaturedProductsReact
+  client:load
+  title={title}
+  subtitle={subtitle}
+  maxItems={maxItems}
   initialProducts={products}
-  lang={lang} 
+  lang={lang}
 />
 )}

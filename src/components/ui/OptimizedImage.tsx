@@ -58,10 +58,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
       loading={priority ? 'eager' : 'lazy'}
       decoding="async"
       className={cn("transition-opacity duration-300", className)}
-      onLoad={(e) => {
-        (e.currentTarget as HTMLImageElement).style.opacity = '1';
-      }}
-      style={{ opacity: 0, ...props.style }}
+      style={props.style}
       {...props}
     />
   );

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import type { Translation, Product, Language } from "../../types";
 import { api } from "../../lib/api";
 import { createTranslate } from "../../lib/i18n";
+import ProductCard from "../product/ProductCard";
 
 interface FeaturedProductsProps {
   title?: Translation;
@@ -70,17 +71,7 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({
         <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-4">
           {products.slice(0, displayLimit).map((product) => (
             <a key={product.id} href={`/product/${product.id}`} className="block group">
-              <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-gray-100">
-                <img 
-                  src={api.getOptimizedImageUrl(product.image, 400)} 
-                  alt={t(product.name)}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-              <div className="mt-3">
-                <h3 className="text-sm font-medium text-gray-900 line-clamp-1">{t(product.name)}</h3>
-                <p className="mt-1 text-sm text-gray-500">${product.price}</p>
-              </div>
+              <ProductCard product={product} lang={lang} />
             </a>
           ))}
         </div>

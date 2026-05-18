@@ -54,8 +54,6 @@ const sizes = propSizes || "(max-width: 768px) 100vw, 33vw";
       loading={priority ? "eager" : "lazy"}
       decoding="async"
       class={cn("transition-opacity duration-300", className)}
-      style="opacity: 0;"
-      onload="this.style.opacity = '1'"
       {...props}
     />
   )
