@@ -162,6 +162,22 @@ export const api = {
     method: 'POST',
     body: JSON.stringify(data)
   }),
+
+  // Blog
+  getBlogs: (params?: { page?: number; pageSize?: number; category?: string; tag?: string; sort?: string }) => {
+    const query = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined) query.set(key, String(value));
+      });
+    }
+    const queryStr = query.toString();
+    return request<{ data: any[]; pagination: { page: number; pageSize: number; total: number; totalPages: number } }>(
+      `/api/blogs${queryStr ? `?${queryStr}` : ''}`
+    );
+  },
+
+  getBlog: (idOrSlug: string) => request<any>(`/api/blogs/${idOrSlug}`),
 };
 
 export default api;

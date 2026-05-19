@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./blog-prose.css";
 
 @plugin "tailwindcss-animate";
 

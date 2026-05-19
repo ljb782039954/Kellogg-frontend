@@ -36,7 +36,7 @@ export async function GET() {
   </url>`);
     });
 
-    // 处理商品详情页
+    // Process product detail pages
     products.forEach(product => {
       if (!product.isActive) return;
       
@@ -56,6 +56,26 @@ export async function GET() {
     </image:image>
   </url>`);
     });
+
+    // Process blog article pages
+    try {
+      const blogsRes = await api.getBlogs({ pageSize: 1000, sort: 'newest' });
+      (blogsRes.data || []).forEach((blog: any) => {
+        const loc = `${siteUrl}/blog/${blog.slug}`;
+        const lastmod = blog.updated_at ? new Date(blog.updated_at).toISOString() : new Date().toISOString();
+        const imageEntry = blog.cover_image
+          ? `\n    <image:image>\n      <image:loc>${blog.cover_image}</image:loc>\n      <image:title><![CDATA[${blog.title_en || blog.title_zh}]]></image:title>\n    </image:image>` : '';
+        urls.push(`
+  <url>
+    <loc>${loc}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>${imageEntry}
+  </url>`);
+      });
+    } catch (blogErr) {
+      console.warn('[Sitemap] Could not fetch blog posts:', blogErr);
+    }
 
     // 3. 组装 XML
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
