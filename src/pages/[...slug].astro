@@ -5,27 +5,25 @@ import Layout from "../layouts/Layout.astro";
 import { api } from "../lib/api";
 import { SiteService } from "../services/siteService";
 import DynamicRenderer from "../components/DynamicRenderer.astro";
-import InquiryView from "../components/pages/InquiryView";
 
 export async function getStaticPaths() {
   // 在构建时获取所有站点数据
   const { pages } = await SiteService.getSiteData(); 
   
   return pages
-    .filter(page => page.id !== 'products') // 排除掉由 products.astro 处理的页面
+    .filter(page => page.id !== 'products' && page.type !== 'fixed-layout') // 排除商品页以及所有固定布局系统页面（如博客、询盘、客户案例，已由各自的物理页面承载）
     .map(page => {
-    // 处理路径，去掉前缀斜杠并处理空路径（首页）
-    const slug = page.path === '/' ? undefined : page.path.replace(/^\//, '');
-    return {
-      params: { slug },
-      props: { pageId: page.id } // 传给页面，避免重复查找
-    };
-  });
+      // 处理路径，去掉前缀斜杠并处理空路径（首页）
+      const slug = page.path === '/' ? undefined : page.path.replace(/^\//, '');
+      return {
+        params: { slug },
+        props: { pageId: page.id } // 传给页面，避免重复查找
+      };
+    });
 }
 
 const { slug } = Astro.params;
 const { pageId } = Astro.props;
-const path = slug === undefined ? "/" : `/${slug}`;
 
 // 1. 获取站点全局数据
 const siteData = await SiteService.getSiteData(Astro);
@@ -40,12 +38,6 @@ if (!fullPage) {
 }
 ---
 
-<Layout title={fullPage.title} lang={lang} seo={fullPage.seo} hideInquiry={pageId === "system-inquiry"}>
-  {
-    pageId === "system-inquiry" ? (
-      <InquiryView lang={lang} companyInfo={siteData.companyInfo} client:load />
-    ) : (
-      <DynamicRenderer schema={fullPage} lang={lang} />
-    )
-  }
+<Layout title={fullPage.title} lang={lang} seo={fullPage.seo}>
+  <DynamicRenderer schema={fullPage} lang={lang} />
 </Layout>

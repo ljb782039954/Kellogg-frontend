@@ -7,9 +7,10 @@ import type { Language, CompanyInfo } from '../../types';
 interface Props {
   lang: Language;
   companyInfo: CompanyInfo;
+  pageContent?: any;
 }
 
-export default function InquiryView({ lang, companyInfo }: Props) {
+export default function InquiryView({ lang, companyInfo, pageContent }: Props) {
   const {
     formData,
     setFormData,
@@ -20,7 +21,7 @@ export default function InquiryView({ lang, companyInfo }: Props) {
     config,
     t,
     language
-  } = useInquiry(lang);
+  } = useInquiry(lang, pageContent);
 
   const contactInfo = companyInfo?.contact || {
     address: { zh: '中国 广州', en: 'Guangzhou, China' },

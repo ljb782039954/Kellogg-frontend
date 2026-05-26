@@ -10,10 +10,15 @@ import type {
   CustomPage
 } from '../types';
 
+// const API_BASE = 
 const API_BASE = (
-  import.meta.env.PUBLIC_API_BASE_URL || 
-  ''
+  import.meta.env.PUBLIC_IS_LOCAL_DEV === "true" ? import.meta.env.PUBLIC_API_BASE_URL_LOCAL : import.meta.env.PUBLIC_API_BASE_URL
 ).replace(/\/$/, '');
+
+// const API_BASE = (
+//   import.meta.env.PUBLIC_API_BASE_URL || 
+//   ''
+// ).replace(/\/$/, '');
 
 // API 错误类型
 export class ApiError extends Error {
@@ -178,6 +183,9 @@ export const api = {
   },
 
   getBlog: (idOrSlug: string) => request<any>(`/api/blogs/${idOrSlug}`),
+
+  // Case Studies
+  getCaseStudies: () => request<any[]>('/api/case-studies'),
 };
 
 export default api;

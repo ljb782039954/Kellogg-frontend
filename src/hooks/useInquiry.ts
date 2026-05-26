@@ -13,8 +13,7 @@ export interface InquiryFormData {
   message: string;
 }
 
-export function useInquiry(lang: Language = 'en') {
-  const [inquiryConfig, setInquiryConfig] = useState<any>(null);
+export function useInquiry(lang: Language = 'en', pageContent?: any) {
   const [formData, setFormData] = useState<InquiryFormData>({
     name: '',
     email: '',
@@ -28,13 +27,7 @@ export function useInquiry(lang: Language = 'en') {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  useEffect(() => {
-    api.getConfig('inquiry_config').then(data => {
-      if (data) setInquiryConfig(data);
-    }).catch(() => {});
-  }, []);
-
-  const config = inquiryConfig || {
+  const config = pageContent || {
     title: { zh: '联系我们要样品', en: 'Contact Us For Samples' },
     description: { 
       zh: '如果您有任何关于产品的咨询，请填写下方表格，我们的团队会尽快与您联系。', 

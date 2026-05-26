@@ -36,11 +36,23 @@ function formatDate(d: string | null) {
 function getBlogTitle(b: BlogSummary) { return lang === 'zh' ? b.title_zh : b.title_en; }
 function getBlogSummary(b: BlogSummary) { return lang === 'zh' ? (b.summary_zh || '') : (b.summary_en || ''); }
 
-const SEO_TITLE = t('博客 - Kellogg Fashion', 'Blog - Kellogg Fashion');
-const SEO_DESC = t('浏览 Kellogg Fashion 博客，获取最新行业资讯、面料指南、服装制造技巧和流行趋势报告。', 'Explore Kellogg Fashion blog for industry news, fabric guides, OEM tips, and trend reports from a leading apparel manufacturer.');
+let blogPageDetail: any = null;
+try {
+  blogPageDetail = await api.getPageById('system-blog');
+} catch (e) {
+  console.error('[Blog Index SSR] Failed to fetch system-blog page details:', e);
+}
+
+const blogSEO = blogPageDetail?.seo || {
+  title: { zh: '博客与资讯 - Kellogg Fashion', en: 'Blog & Resources - Kellogg Fashion' },
+  description: {
+    zh: '浏览 Kellogg Fashion 博客，获取最新行业资讯、面料指南、服装制造技巧和流行趋势报告。',
+    en: 'Explore Kellogg Fashion blog for industry news, fabric guides, OEM tips, and trend reports from a leading apparel manufacturer.'
+  }
+};
 ---
 
-<Layout title={SEO_TITLE} description={SEO_DESC} lang={lang}>
+<Layout seo={blogSEO} lang={lang}>
   <!-- Hero Banner -->
   <section class="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
     <div class="absolute inset-0 opacity-10">

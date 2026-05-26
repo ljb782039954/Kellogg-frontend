@@ -24,6 +24,7 @@ import ImageBannerTag from "./blocks/ImageBannerTag.astro";
 import ImageFull from "./blocks/ImageFull";
 import PartnerLogos from "./blocks/PartnerLogos.astro";
 import VideoSection from "./blocks/VideoSection.astro";
+import CaseStudies from "./blocks/CaseStudies.astro";
 
 interface Props {
   schema: CustomPage;
@@ -138,6 +139,9 @@ const blocksWithData = await Promise.all(
 
       case 'videoSection':
         return <VideoSection {...block.content} lang={lang} />;
+
+      case 'caseStudies':
+        return <CaseStudies lang={lang} />;
       
       default:
         return (

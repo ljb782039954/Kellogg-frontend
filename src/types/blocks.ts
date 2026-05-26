@@ -8,6 +8,7 @@ import type { Translation } from "./common";
 export type BlockType =
   | 'carousel'
   | 'categories'
+  | 'caseStudies'
   | 'newArrivals'
   | 'featuredProducts'
   | 'productGrid'
@@ -55,6 +56,8 @@ export interface CustomPage {
   path: string;        // 路由地址 (如 '/', '/products')
   title: Translation;  // 页面名称/标题
   isFixed: boolean;    // 是否为固定系统页面 (不可删除)
+  type?: 'fixed-block' | 'dynamic-block' | 'fixed-layout'; // 显式页面类型
+  content?: any;       // 页面配置内容
   blocks: PageBlock[]; // 存放积木块数组
   seo?: {
     title: Translation;
