@@ -4,25 +4,25 @@ export const prerender = true;
 import Layout from "../layouts/Layout.astro";
 import { api } from "../lib/api";
 import { SiteService } from "../services/siteService";
-import CaseStudies from "../components/blocks/CaseStudies.astro";
+import CustomerReviews from "../components/blocks/CustomerReviews.astro";
 
 // 1. 获取站点全局数据
 const siteData = await SiteService.getSiteData(Astro);
 const { lang } = siteData;
 
-// 2. 匹配 case-studies 页面的 SEO 配置
-let caseStudiesPage: any = null;
+// 2. 匹配 customer-reviews 页面的 SEO 配置
+let customerReviewsPage: any = null;
 try {
-  caseStudiesPage = await api.getPageById('case-studies');
+  customerReviewsPage = await api.getPageById('customer-reviews');
 } catch (e) {
-  console.error('[Case Studies SSR] Failed to fetch case-studies page details:', e);
+  console.error('[Customer Reviews SSR] Failed to fetch customer-reviews page details:', e);
 }
 
-const pageSEO = caseStudiesPage?.seo || {
-  title: { zh: '客户案例 - Kellogg Fashion', en: 'Case Studies - Kellogg Fashion' },
+const pageSEO = customerReviewsPage?.seo || {
+  title: { zh: '客户评价 - Kellogg Fashion', en: 'Customer Reviews - Kellogg Fashion' },
   description: {
     zh: '来自全球品牌买家的真实穿搭视频与成衣评价，见证 Kellogg Fashion 的服装制造品质。',
-    en: 'Real try-on videos and honest client case studies from global brand buyers — see Kellogg Fashion apparel quality in action.'
+    en: 'Real try-on videos and honest client reviews from global brand buyers — see Kellogg Fashion apparel quality in action.'
   }
 };
 ---
@@ -39,7 +39,7 @@ const pageSEO = caseStudiesPage?.seo || {
         {lang === 'zh' ? '客户见证' : 'Testimonials'}
       </span>
       <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
-        {lang === 'zh' ? '客户案例' : 'Case Studies'}
+        {lang === 'zh' ? '客户评价' : 'Customer Reviews'}
       </h1>
       <p class="text-lg text-white/70 max-w-xl mx-auto">
         {lang === 'zh' ? '听听来自全球合作伙伴的真实反馈，见证高品质服装制造。' : 'Real feedback from global partners, witnessing premium apparel manufacturing.'}
@@ -48,5 +48,5 @@ const pageSEO = caseStudiesPage?.seo || {
   </section>
 
   <!-- 真实数据展示 -->
-  <CaseStudies lang={lang} />
+  <CustomerReviews lang={lang} />
 </Layout>

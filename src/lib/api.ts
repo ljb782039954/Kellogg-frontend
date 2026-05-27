@@ -184,8 +184,8 @@ export const api = {
 
   getBlog: (idOrSlug: string) => request<any>(`/api/blogs/${idOrSlug}`),
 
-  // Case Studies
-  getCaseStudies: () => request<any[]>('/api/case-studies'),
+  // Customer Reviews
+  getReviews: () => request<any[]>('/api/reviews'),
 };
 
 export default api;
