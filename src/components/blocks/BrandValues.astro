@@ -3,6 +3,7 @@ import * as LucideIcons from "lucide-react";
 import type { Translation, Language } from "../../types";
 import SectionHeader from "../SectionHeader.astro";
 import { createTranslate } from "../../lib/i18n";
+import { marked } from 'marked';
 
 interface BrandValue {
   id: number;
@@ -44,9 +45,11 @@ const t = createTranslate(lang);
                   <Icon class="w-6 h-6 text-primary" />
                 </div>
                 <h4 class="font-medium mb-1">{t(item.title)}</h4>
-                <p class="text-sm text-gray-500 max-w-xs line-clamp-2">
+                {/* <p class="text-sm text-gray-500 max-w-xs line-clamp-2">
                   {t(item.description)}
-                </p>
+                </p> */}
+              <div class="text-sm text-gray-500 content-rich-text" set:html={marked.parse(t(item.description))} />
+                
               </div>
             );
           })}

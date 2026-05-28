@@ -1,6 +1,7 @@
 ---
 import type { Translation, Language } from "../../types";
 import { createTranslate } from "../../lib/i18n";
+import { marked } from "marked";
 
 interface Props {
   title?: Translation;
@@ -19,6 +20,16 @@ const {
   lang,
 } = Astro.props;
 const t = createTranslate(lang);
+
+// HTML 实体反转义，确保富文本标签在渲染时生效
+function decodeHtml(html: string) {
+  return html
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&");
+}
 ---
 
 <section
@@ -42,15 +53,9 @@ const t = createTranslate(lang);
     }
     {
       content && (
-        <p
-          class:list={[
-            "text-gray-500 max-w-2xl text-md md:text-lg mx-auto leading-relaxed",
-            // alignment === 'center' ? 'mx-auto' : ''
-          ]}
-        >
-          {t(content)}
-        </p>
+        <div class="text-sm text-gray-500 content-rich-text" set:html={marked.parse(decodeHtml(t(content)))} />
       )
     }
   </div>
 </section>
+

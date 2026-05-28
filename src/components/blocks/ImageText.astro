@@ -2,6 +2,7 @@
 import type { Translation, Language } from "../../types";
 import OptimizedImage from "../ui/OptimizedImage.astro";
 import { createTranslate } from "../../lib/i18n";
+import { marked } from "marked";
 
 interface Props {
   title?: Translation;
@@ -73,9 +74,7 @@ const isInternal = buttonLink?.startsWith("/");
               ))}
             </ul>
           ) : (
-            <p class="text-gray-600 text-md md:text-lg leading-relaxed">
-              {value}
-            </p>
+            <div class="text-gray-600 text-md md:text-lg leading-relaxed content-rich-text" set:html={marked.parse(value)} />
           )
         }
 
@@ -96,3 +95,4 @@ const isInternal = buttonLink?.startsWith("/");
     </div>
   </div>
 </section>
+

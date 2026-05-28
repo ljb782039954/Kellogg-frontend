@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { marked } from 'marked';
 import type { Translation, NavLink, Language } from '../../types';
 import OptimizedImage from '../ui/OptimizedImage';
 
@@ -109,14 +110,13 @@ export default function Carousel({
                 {t(slide.title)}
               </motion.h2>
               {slide.subtitle && (
-                <motion.p
+                <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5, duration: 0.6 }}
-                  className="text-lg md:text-xl mb-8 text-white/80"
-                >
-                  {t(slide.subtitle)}
-                </motion.p>
+                  className="text-lg md:text-xl mb-8 text-white/80 content-rich-text"
+                  dangerouslySetInnerHTML={{ __html: marked.parseInline(t(slide.subtitle)) as string }}
+                />
               )}
               {slide.cta && (
                 <motion.a
@@ -164,3 +164,4 @@ export default function Carousel({
     </div>
   );
 }
+
