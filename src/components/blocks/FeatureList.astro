@@ -20,6 +20,16 @@ interface Props {
 
 const { title, subtitle, items = [], lang } = Astro.props;
 const t = createTranslate(lang);
+
+// HTML 实体反转义，确保富文本标签在渲染时生效
+function decodeHtml(html: string) {
+  return html
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&");
+}
 ---
 
 {items.length > 0 && (
@@ -36,7 +46,7 @@ const t = createTranslate(lang);
                 <Icon class="w-6 h-6 text-primary" />
               </div>
               <h4 class="font-semibold mb-2">{t(item.title)}</h4>
-              <div class="text-sm text-gray-500 content-rich-text" set:html={marked.parse(t(item.description))} />
+              <div class="text-sm text-gray-500 content-rich-text" set:html={marked.parse(decodeHtml(t(item.description)))} />
             </div>
           );
         })}
@@ -44,4 +54,3 @@ const t = createTranslate(lang);
     </div>
   </section>
 )}
-

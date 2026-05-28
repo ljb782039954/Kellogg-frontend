@@ -48,7 +48,7 @@ const t = createTranslate(lang);
                 {/* <p class="text-sm text-gray-500 max-w-xs line-clamp-2">
                   {t(item.description)}
                 </p> */}
-              <div class="text-sm text-gray-500 content-rich-text" set:html={marked.parse(t(item.description))} />
+              <div class="text-sm content-rich-text" set:html={marked.parse(t(item.description))} />
                 
               </div>
             );

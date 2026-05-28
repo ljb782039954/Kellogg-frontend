@@ -83,7 +83,7 @@
     --ring: 240 5.9% 10%;
     --radius: 0.625rem;
     --tawkChat: rgb(73, 31, 170);
-    --richTextPrimary: rgb(228, 66, 17);
+    --richTextPrimary: rgb(182, 40, 238);
   }
 
   .dark {
@@ -107,7 +107,7 @@
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
     --tawkChat: rgb(73, 31, 170);
-    --richTextPrimary: rgb(228, 66, 17);
+    --richTextPrimary: rgb(182, 40, 238);
 
   }
 }
@@ -126,7 +126,7 @@
 
 /* 富文本样式美化 (Tailwind v4) */
 .content-rich-text {
-  @apply text-gray-600;
+  @apply text-gray-500;
 }
 .content-rich-text a {
   @apply text-richTextPrimary underline underline-offset-2 transition-all duration-200 hover:opacity-80;

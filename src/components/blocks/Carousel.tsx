@@ -38,6 +38,15 @@ const slideVariants = {
   }),
 };
 
+function decodeHtml(html: string) {
+  return (html || '')
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&");
+}
+
 export default function Carousel({ 
   items = [], 
   autoPlay = true, 
@@ -115,7 +124,7 @@ export default function Carousel({
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5, duration: 0.6 }}
                   className="text-lg md:text-xl mb-8 text-white/80 content-rich-text"
-                  dangerouslySetInnerHTML={{ __html: marked.parseInline(t(slide.subtitle)) as string }}
+                  dangerouslySetInnerHTML={{ __html: marked.parseInline(decodeHtml(t(slide.subtitle))) as string }}
                 />
               )}
               {slide.cta && (

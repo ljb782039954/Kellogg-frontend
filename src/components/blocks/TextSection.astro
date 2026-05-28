@@ -53,7 +53,7 @@ function decodeHtml(html: string) {
     }
     {
       content && (
-        <div class="text-sm text-gray-500 content-rich-text" set:html={marked.parse(decodeHtml(t(content)))} />
+        <div class="text-sm content-rich-text" set:html={marked.parse(decodeHtml(t(content)))} />
       )
     }
   </div>
